@@ -1,112 +1,192 @@
-import Image from "next/image";
+"use client";
+
+import Table from "@/components/Table";
+import { TableRowData } from "@/interfaces/components/Table";
+import { useEffect, useState } from "react";
+import { Competition, ShortMatch } from "@/interfaces/models/Match";
+import { fetchMatches } from "@/api/match";
+import { format } from "@/utils/format";
+import { useUIStore } from "@/stores/ui";
+import { Button, Card, CardBody, Chip, Tab, Tabs, ThemeColors } from "@nextui-org/react";
+import { TableProps } from "@/interfaces/components/Table";
+import { toast } from "react-toastify";
+import { User, useUserStore } from "@/stores/user";
+import { ShortTeam } from "@/interfaces/models/Team";
+import { useBetStore } from "@/stores/bet";
+import { betServices } from "@/services/bet";
+
+interface TableData {
+  title: string;
+  rows: any[];
+}
+
+export interface Outcome {
+  label: string;
+  color: ThemeColors;
+  value: string;
+}
+
+export interface Bet {
+  id: number;
+  amount: string;
+  bet_type: string;
+  date: string;
+  match_name?: string;
+  opponent: null | User;
+  selected_object: ShortTeam;
+  status: string;
+  outcome: Outcome | null;
+}
 
 export default function Home() {
+  const headers: string[] = ["Home Team", "Away Team", "Date", "Actions"];
+  const [tableData, setTableData] = useState<TableData[]>([]);
+  const { openModal } = useUIStore();
+  const { fetchOpenBets, fetchMyBets } = betServices();
+  const { openBets, myBets } = useBetStore();
+  const { user } = useUserStore();
+  const [betData, setBetData] = useState<TableProps | null>(null);
+  const [tab, setTab] = useState<string>('upcoming');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const competitions: Competition[] = await fetchMatches();
+      const _tableData: TableData[] = [];
+      competitions.forEach((competition: Competition) => {
+        const _rows: TableRowData[] = [];
+        competition.matches.forEach((match: ShortMatch) =>
+          _rows.push({
+            cells: [
+              match.home_team.short_name,
+              match.away_team.short_name,
+              format(match.utc_date),
+              <Button
+                onClick={() => openModal("place-bet", match)}
+                fullWidth
+                size="sm"
+                color="primary"
+              >
+                Create Bet
+              </Button>,
+            ],
+          })
+        );
+        _tableData.push({ title: competition.name, rows: _rows });
+      });
+      setTableData(_tableData);
+    };
+    fetchData();
+  }, []);
+
+  const acceptBet = (bet: Bet) => {
+    if (parseFloat(user!.credits) < parseFloat(bet.amount)) {
+      toast.error("Not enough balance");
+      return openModal("deposit");
+    } else {
+      openModal("confirm-bet", bet);
+    }
+  };
+
+  useEffect(() => {
+    if (openBets) {
+      displayBets();
+    }
+  }, [openBets]);
+
+  const displayBets = async () => {
+    let bets: Bet[];
+    let headers: string[] = [];
+    let rows: TableRowData[] = [];
+    if (tab === 'my-bets') {
+      bets = await fetchMyBets();
+      headers = ["Date", "You need", "Match", "Amount", "Opponent"];
+      bets!.forEach((bet: Bet) => {
+        console.log(bet.opponent);
+        rows.push({
+          cells: [
+            format(bet.date),
+            <div className="flex justify-between items-center gap-2">
+              <div>{bet.outcome!.value}</div>
+              <Chip color={bet.outcome!.color} variant="flat" size="sm" radius="sm">
+                {bet.outcome!.label}
+              </Chip>
+            </div>,
+            bet.match_name,
+            `£${bet.amount}`,
+            bet.opponent?.username,
+          ],
+        });
+      });
+    } else if (tab === 'open-bets') {
+      bets = await fetchOpenBets();
+      headers = ["Date", "You need", "Match", "Amount", "Actions"];
+      bets!.forEach((bet: Bet) => {
+        rows.push({
+          cells: [
+            format(bet.date),
+            <div className="flex justify-between items-center gap-2">
+              <div>{bet.outcome!.value}</div>
+              <Chip color={bet.outcome!.color} variant="flat" size="sm" radius="sm">
+                {bet.outcome!.label}
+              </Chip>
+            </div>,
+            bet.match_name,
+            `£${bet.amount}`,
+            <Button
+              onClick={() => acceptBet(bet)}
+              size="sm"
+              variant="flat"
+              color="primary"
+            >
+              Accept
+            </Button>,
+          ],
+        });
+      });
+    }
+    setBetData({
+      headers,
+      rows,
+    });
+  };
+
+  useEffect(() => {
+    if (['my-bets', 'open-bets'].includes(tab)) {
+      displayBets();
+    }
+  }, [tab]);
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+    <main className="dark flex min-h-screen flex-col items-center justify-between p-12">
+      <div className="flex justify-start flex-col w-full mb-4">
+        <Tabs
+          onSelectionChange={(e: any) => setTab(e)}
+          aria-label="Navigation"
+          disabledKeys={user ? [] : ["open-bets", "my-bets"]}
+          id="tabs"
         >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          <Tab key="upcoming" title="Upcoming matches">
+            <Tabs variant="underlined">
+              {tableData &&
+                tableData.map((table) => (
+                  <Tab key={table.title} title={table.title}>
+                    <Table rows={table.rows} headers={headers} />
+                  </Tab>
+                ))}
+            </Tabs>
+          </Tab>
+          <Tab key="my-bets" title="My bets">
+            {betData && (
+              <Table headers={betData.headers} rows={betData.rows} />
+            )}
+          </Tab>
+          <Tab key="open-bets" title="Open bets">
+            {betData && (
+              <Table headers={betData.headers} rows={betData.rows} />
+            )}
+          </Tab>
+        </Tabs>
       </div>
     </main>
   );
