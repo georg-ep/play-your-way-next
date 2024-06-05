@@ -15,5 +15,6 @@ export interface TableRowData {
 export interface TableProps {
   headers: string[];
   rows: TableRowData[];
+  onRowClick?: (rowIdx: number) => void;
 }
 

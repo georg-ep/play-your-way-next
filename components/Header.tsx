@@ -12,11 +12,13 @@ import { useUIStore } from "@/stores/ui";
 import { useUserStore } from "@/stores/user";
 import { useEffect } from "react";
 import { userServices } from "@/services/user";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const { openModal } = useUIStore();
   const { user } = useUserStore();
   const { fetchUser, logout } = userServices();
+  const router = useRouter();
 
   useEffect(() => {
     fetchUser();
@@ -26,6 +28,7 @@ export default function Header() {
     switch (type) {
       case "logout":
         logout();
+        router.push('/');
         break;
       case "login":
         openModal("auth", { initialType: "login" });
@@ -39,7 +42,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar maxWidth="full" className='px-[24px]' position="static">
+    <Navbar maxWidth="full" className='px-[0]' position="static">
       <NavbarBrand>
         <p className="font-bold text-inherit">PlayYourWay</p>
       </NavbarBrand>

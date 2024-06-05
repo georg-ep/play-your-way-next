@@ -41,7 +41,7 @@ export default function ConfirmBetModal() {
           <div>
             {match_name}, {format(date)}
           </div>
-          <div className="mt-4">You're betting</div>
+          <div className="mt-4">Youre betting</div>
           <div className="text-lg font-bold mb-2">
             {outcome.value}
           </div>
