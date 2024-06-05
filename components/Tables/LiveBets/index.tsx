@@ -12,7 +12,7 @@ export default function LiveBetsTable() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://0.0.0.0:8080/ws/chat/");
+    const ws = new WebSocket("ws://e97b-2a02-6b6f-f820-ad00-443d-26d-e564-a48d.ngrok-free.app:8080/ws/chat/");
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
       if (data?.live_matches) {
