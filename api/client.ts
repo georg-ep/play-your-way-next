@@ -8,12 +8,14 @@ export async function request<T>(
     },
   }
 ): Promise<T> {
-  const BASE_URL = "https://e97b-2a02-6b6f-f820-ad00-443d-26d-e564-a48d.ngrok-free.app/api/";
+  const BASE_URL =
+    "https://e97b-2a02-6b6f-f820-ad00-443d-26d-e564-a48d.ngrok-free.app/api/";
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": "69420",
-  }
+    "Access-Control-Allow-Origin": "*",
+  };
   if (getCookie("access")) {
     options.headers = {
       ...options.headers,
