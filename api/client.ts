@@ -15,6 +15,8 @@ export async function request<T>(
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": "69420",
     "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   };
   if (getCookie("access")) {
     options.headers = {
