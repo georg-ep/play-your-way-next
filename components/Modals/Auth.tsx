@@ -1,6 +1,6 @@
 import { useEffect, useState, memo, Key } from "react";
 import Modal from "../Modal";
-import { Input, Tab, Tabs } from "@nextui-org/react";
+import { Calendar, Input, Tab, Tabs } from "@nextui-org/react";
 import { userServices } from "@/services/user";
 import { useUIStore } from "@/stores/ui";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ export default function AuthModal() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [dob, setDob] = useState<string>("");
   const { login, register } = userServices();
   const { closeModal, modalData, openModal } = useUIStore();
   const [authView, setAuthView] = useState<string>(
@@ -68,6 +69,12 @@ export default function AuthModal() {
               onValueChange: setPassword,
               isRequired: true,
             },
+            // {
+            //   key: "dob",
+            //   value: dob,
+            //   onValueChange: setDob,
+            //   isRequired: true,
+            // },
           ],
         };
     }
@@ -110,7 +117,9 @@ export default function AuthModal() {
                         value,
                         onValueChange,
                         isRequired,
-                      }) => (
+                      }) => 
+                      // key !== "dob" ? 
+                      (
                         <Input
                           key={key}
                           type={type}
@@ -120,7 +129,8 @@ export default function AuthModal() {
                           isRequired={isRequired}
                           className="mb-4"
                         />
-                      )
+                      ) 
+                      // : <Calendar showMonthAndYearPickers value={value} onValueChange={onValueChange}  />
                     )}
                 </Tab>
               ))}

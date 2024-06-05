@@ -42,7 +42,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar maxWidth="full" className='px-[0]' position="static">
+    <Navbar isBordered maxWidth="full" className='px-[0]' position="static">
       <NavbarBrand>
         <p className="font-bold text-inherit">PlayYourWay</p>
       </NavbarBrand>

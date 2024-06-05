@@ -28,6 +28,8 @@ export default function Modal({
       isDismissable={true}
       isKeyboardDismissDisabled={true}
       className={className}
+      placement="center"
+      scrollBehavior="outside"
     >
       <ModalContent>
         <>

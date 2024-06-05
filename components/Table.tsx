@@ -13,7 +13,7 @@ import { TableProps } from "@/interfaces/components/Table";
 
 export default function Table({ headers, rows, onRowClick }: TableProps) {
   return (
-    <NextUITable width={"100%"} color={"success"} aria-label="table">
+    <NextUITable isCompact isHeaderSticky shadow="lg" layout="fixed" width={"100%"} color={"success"} aria-label="table">
       <TableHeader>
         {headers &&
           headers.map((header, index) => (
@@ -26,6 +26,7 @@ export default function Table({ headers, rows, onRowClick }: TableProps) {
         {rows &&
           rows.map((row, rowIdx) => (
             <TableRow
+              className="cursor-pointer hover:outline hover:outline-1 hover:outline-gray-700 box-border transition-all"
               onClick={() => onRowClick && onRowClick(rowIdx)}
               key={`row_${rowIdx}`}
             >
