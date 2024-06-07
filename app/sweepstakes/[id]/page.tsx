@@ -107,7 +107,7 @@ export default function SweepstakeIndex() {
           <div className="border border-default-300 rounded p-4">
             <ol className="list-decimal list-inside text-sm">
               <li className="mb-2">
-                Let's get this party started, <span className="font-semibold">bois!</span>
+                Lets get this party started, <span className="font-semibold">bois!</span>
               </li>
               <li className="mb-2">
                 Select your outcomes of the games below.
