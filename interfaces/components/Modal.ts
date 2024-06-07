@@ -4,4 +4,5 @@ export interface ModalProps {
     onSubmit?: () => void;
     showActions?: boolean;
     className?: string;
+    submitText: string;
   }

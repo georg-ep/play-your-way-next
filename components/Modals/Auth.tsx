@@ -1,6 +1,6 @@
 import { useEffect, useState, memo, Key } from "react";
 import Modal from "../Modal";
-import { Calendar, Input, Tab, Tabs } from "@nextui-org/react";
+import { Button, Calendar, Input, Tab, Tabs } from "@nextui-org/react";
 import { userServices } from "@/services/user";
 import { useUIStore } from "@/stores/ui";
 import { toast } from "react-toastify";
@@ -80,7 +80,8 @@ export default function AuthModal() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const { initialType } = modalData;
     switch (initialType) {
       case "login":
@@ -98,16 +99,17 @@ export default function AuthModal() {
   return (
     <Modal
       title=""
-      className="min-h-[450px]"
+      className="capitalize"
+      showActions={false}
       body={
-        <>
-          <Tabs
-            onSelectionChange={(e: Key) => setAuthView(e.toString())}
-            selectedKey={authView}
-          >
-            {authTypes &&
-              authTypes.map((type) => (
-                <Tab key={type} title={layout(type)?.title}>
+        <Tabs
+          onSelectionChange={(e: Key) => setAuthView(e.toString())}
+          selectedKey={authView}
+        >
+          {authTypes &&
+            authTypes.map((type) => (
+              <Tab key={type} title={layout(type)?.title}>
+                <form onSubmit={handleSubmit}>
                   {layout(type) &&
                     layout(type)?.fields.map(
                       ({
@@ -117,26 +119,30 @@ export default function AuthModal() {
                         value,
                         onValueChange,
                         isRequired,
-                      }) => 
-                      // key !== "dob" ? 
-                      (
+                      }) => (
+                        // key !== "dob" ?
                         <Input
                           key={key}
                           type={type}
+                          variant="bordered"
                           label={label}
                           value={value}
                           onValueChange={onValueChange}
                           isRequired={isRequired}
                           className="mb-4"
                         />
-                      ) 
+                      )
                       // : <Calendar showMonthAndYearPickers value={value} onValueChange={onValueChange}  />
                     )}
-                </Tab>
-              ))}
-          </Tabs>
-        </>
+                    <div className='flex justify-end w-full'>
+                    <Button type="submit" variant="flat" color="primary">Submit</Button>
+                    </div>
+                </form>
+              </Tab>
+            ))}
+        </Tabs>
       }
+      submitText={authView}
       onSubmit={handleSubmit}
     />
   );

@@ -7,7 +7,17 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { format } from "@/utils/format";
-import { Button, Chip, Spinner, Tab, Tabs } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Divider,
+  Spinner,
+  Tab,
+  Tabs,
+} from "@nextui-org/react";
 import { toast } from "react-toastify";
 import LeaderboardTable from "@/components/Tables/Leaderboard";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
@@ -46,8 +56,6 @@ export default function SweepstakeIndex() {
     }
   };
 
-  useEffect(() => console.log(selections), [selections]);
-
   const submit = async () => {
     try {
       await submitSelections(Number(params.id), selections);
@@ -67,6 +75,59 @@ export default function SweepstakeIndex() {
           {sweepstake?.name ?? <Spinner size="sm" color="default" />}
         </BreadcrumbItem>
       </Breadcrumbs>
+      <Card className="mb-4 p-4">
+        {sweepstake?.name ? (
+          <CardHeader className="flex gap-3">
+            <div className="w-full">
+              <div>
+                <p className="text-[32px] text-center font-bold">{sweepstake.name}</p>
+                <p className="text-lg text-center text-default-600">
+                  {format(sweepstake.start_date)}
+                </p>
+              <div className='my-2 flex flex-wrap justify-center gap-2'>
+                <Chip variant="dot" color="success">
+                  {sweepstake.matches.length} matches to predict
+                </Chip>
+                <Chip variant="dot" color="default">
+                  {sweepstake.participants} participants
+                </Chip>
+                <Chip variant="dot" color="danger">
+                  £{sweepstake.participants * sweepstake.entry_cost}.00 pot
+                </Chip>
+              </div>
+              </div>
+            </div>
+          </CardHeader>
+        ) : (
+          <Spinner size="lg" className="my-5" color="default" />
+        )}
+        <Divider />
+        <CardBody>
+          <p className="text-default-600 text-md font-medium mb-4">How to play</p>
+          <div className="border border-default-300 rounded p-4">
+            <ol className="list-decimal list-inside text-sm">
+              <li className="mb-2">
+                Let's get this party started, <span className="font-semibold">bois!</span>
+              </li>
+              <li className="mb-2">
+                Select your outcomes of the games below.
+              </li>
+              <li className="mb-2">
+                Each correct prediction will be worth <span className="font-semibold">3 points</span>.
+              </li>
+              <li className="mb-2">
+                Check your score by clicking the <span className="font-semibold">leaderboard</span> tab.
+              </li>
+              <li className="mb-2">
+                The winner will take home the <span className="font-semibold">pot</span>.
+              </li>
+              <li className="mb-2">
+                Enjoy the <span className="font-semibold">jubbly</span> experience!
+              </li>
+            </ol>
+          </div>
+        </CardBody>
+      </Card>
       <Tabs className="w-full">
         <Tab className="w-full" key="selections" title="Selections">
           {sweepstake && sweepstake.matches ? (
@@ -75,9 +136,9 @@ export default function SweepstakeIndex() {
                 sweepstake.matches.map((match: ShortMatch, index: number) => (
                   <div
                     key={`match_${index}`}
-                    className="flex gap-2 items-start justify-center bg-[#ffffff20] p-2 rounded-lg"
+                    className="flex gap-2 border border-1 border-default-400 items-start justify-center bg-[#ffffff20] p-2 rounded-lg"
                   >
-                    <div className="flex gap-1 w-[100px] truncate items-center justify-end">
+                    <div className="flex gap-1 w-[150px] truncate items-center justify-end">
                       <div>{match.home_team.short_name}</div>
                       {match.home_team.crest && (
                         <Image
@@ -149,7 +210,7 @@ export default function SweepstakeIndex() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-1 w-[100px] truncate items-center">
+                    <div className="flex gap-1 w-[150px] truncate items-center">
                       {match.away_team.crest && (
                         <Image
                           src={match.away_team.crest}
@@ -169,7 +230,7 @@ export default function SweepstakeIndex() {
               <Spinner color="default" size="lg" />
             </div>
           )}
-          <div className='max-sm:fixed max-sm:sticky box-border bottom-0 bg-black'>
+          <div className="max-sm:fixed max-sm:sticky box-border bottom-0 bg-black">
             <Button
               variant="solid"
               color="success"

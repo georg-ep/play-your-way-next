@@ -17,6 +17,7 @@ export default function Modal({
   body,
   onSubmit,
   showActions = true,
+  submitText = 'Submit',
   className='',
 }: ModalProps) {
   const { isModalOpen, closeModal } = useUIStore();
@@ -28,7 +29,7 @@ export default function Modal({
       isDismissable={true}
       isKeyboardDismissDisabled={true}
       className={className}
-      placement="center"
+      placement={'top-center'}
       scrollBehavior="outside"
     >
       <ModalContent>
@@ -41,7 +42,7 @@ export default function Modal({
                 Close
               </Button>
               <Button color="primary" onPress={onSubmit}>
-                Action
+                {submitText}
               </Button>
             </ModalFooter>
           )}

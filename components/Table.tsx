@@ -13,7 +13,7 @@ import { TableProps } from "@/interfaces/components/Table";
 
 export default function Table({ headers, rows, onRowClick }: TableProps) {
   return (
-    <NextUITable isCompact isHeaderSticky shadow="lg" layout="fixed" width={"100%"} color={"success"} aria-label="table">
+    <NextUITable isCompact width={"100%"} color={"success"} aria-label="table">
       <TableHeader>
         {headers &&
           headers.map((header, index) => (

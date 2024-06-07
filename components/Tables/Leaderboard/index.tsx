@@ -26,7 +26,7 @@ export default function LeaderboardTable() {
       console.log("leaderboard", leaderboard);
       leaderboard.forEach((row) => {
         rows.push({
-          cells: [row.user.email, row.points],
+          cells: [row.user.username, row.points],
         });
       });
       setLeaderboardData({
