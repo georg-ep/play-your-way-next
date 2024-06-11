@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Modal from "../Modal";
 import Head from "next/head";
-import { Input, Spinner } from "@nextui-org/react";
+import { Button, Card, Input, Spinner } from "@nextui-org/react";
 import useSquare from "@/hooks/useSquare";
 export default function DepositModal() {
   const [amount, setAmount] = useState<string>("");
@@ -26,14 +26,19 @@ export default function DepositModal() {
               isRequired
             />
             <form hidden={loading} id="payment-form">
+              <Card className='p-4 mb-4 rounded-sm text-sm border border-1 border-default-400'>
+                <div className='font-bold'>Deposit info for test credits</div>
+                <div>Card Number: 5105 1051 0510 5100</div>
+                <div>Rest of the details can be random</div>
+              </Card>
               <div id="apple-pay-button"></div>
               <div id="card-container"></div>
-              <button
-                className={`overflow-hidden h-[40px] flex items-center justify-center border-box transition-all bg-black text-white rounded-md px-4 py-2 w-full`}
+              <Button
+                color="primary"
                 id="card-button"
                 type="button"
-
-                disabled={!amount || Number(amount) < 1}
+                fullWidth
+                isDisabled={!amount || Number(amount) < 1 || processingPayment}
               >
                 {processingPayment ? (
                   <Spinner color="white" size="sm" />
@@ -42,9 +47,9 @@ export default function DepositModal() {
                 ) : (
                   "Enter an amount"
                 )}
-              </button>
+              </Button>
             </form>
-            {loading ? <Spinner /> : null}
+            {loading ? <Spinner color="default" /> : null}
             <div id="payment-status-container"></div>
           </>
         }

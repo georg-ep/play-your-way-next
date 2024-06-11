@@ -24,11 +24,13 @@ export async function request<T>(
   try {
     const response = await fetch(BASE_URL + url, options);
     if (!response.ok) {
-      throw new Error(`HTTP error ${response.status}`);
+      const errorData = await response.json();
+      const error = new Error('HTTP error');
+      (error as any).response = errorData;
+      throw error;
     }
     return await response.json();
   } catch (error) {
-    console.error("Error:", error);
-    throw new Error(`HTTP error ${error}`);
+    throw error;
   }
 }

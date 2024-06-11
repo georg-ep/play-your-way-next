@@ -21,6 +21,7 @@ import {
 import { toast } from "react-toastify";
 import LeaderboardTable from "@/components/Tables/Leaderboard";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+import { useUIStore } from "@/stores/ui";
 
 export interface FullTimeSelection {
   [match_id: number]: "Home" | "Draw" | "Away";
@@ -29,6 +30,7 @@ export interface FullTimeSelection {
 export default function SweepstakeIndex() {
   const params = useParams();
   const { fetchSweepstakeDetail, submitSelections } = sweepstakeServices();
+  const { openModal } = useUIStore();
   const [sweepstake, setSweepstake] = useState<Sweepstake | null>(null);
   const [selections, setSelections] = useState<FullTimeSelection>({});
   const router = useRouter();
@@ -61,14 +63,17 @@ export default function SweepstakeIndex() {
       await submitSelections(Number(params.id), selections);
       toast.success("Submitted selections");
     } catch (e) {
-      toast.error("Error submitting selections");
+      toast.error(e.response?.detail ?? "Error submitting selections");
+      if (e.response?.detail?.includes("credits")) {
+        openModal("deposit");
+      }
     }
   };
 
   return (
     <div className="dark flex min-h-screen text-white flex-col justify-start w-full max-sm:px-2 max-sm:py-6 md:p-12">
       <Breadcrumbs variant="solid" key="crumbs" size="md" className="mb-8">
-        <BreadcrumbItem onClick={() => router.push("/")}>
+        <BreadcrumbItem onPress={() => router.push("/")}>
           Sweepstakes
         </BreadcrumbItem>
         <BreadcrumbItem>
@@ -80,21 +85,23 @@ export default function SweepstakeIndex() {
           <CardHeader className="flex gap-3">
             <div className="w-full">
               <div>
-                <p className="text-[32px] text-center font-bold">{sweepstake.name}</p>
+                <p className="text-[32px] text-center font-bold">
+                  {sweepstake.name}
+                </p>
                 <p className="text-lg text-center text-default-600">
                   {format(sweepstake.start_date)}
                 </p>
-              <div className='my-2 flex flex-wrap justify-center gap-2'>
-                <Chip variant="dot" color="success">
-                  {sweepstake.matches.length} matches to predict
-                </Chip>
-                <Chip variant="dot" color="default">
-                  {sweepstake.participants} participants
-                </Chip>
-                <Chip variant="dot" color="danger">
-                  £{sweepstake.participants * sweepstake.entry_cost}.00 pot
-                </Chip>
-              </div>
+                <div className="my-2 flex flex-wrap justify-center gap-2">
+                  <Chip variant="dot" color="success">
+                    {sweepstake.matches.length} matches to predict
+                  </Chip>
+                  <Chip variant="dot" color="default">
+                    {sweepstake.participants} participants
+                  </Chip>
+                  <Chip variant="dot" color="danger">
+                    £{sweepstake.participants * sweepstake.entry_cost}.00 pot
+                  </Chip>
+                </div>
               </div>
             </div>
           </CardHeader>
@@ -103,26 +110,31 @@ export default function SweepstakeIndex() {
         )}
         <Divider />
         <CardBody>
-          <p className="text-default-600 text-md font-medium mb-4">How to play</p>
+          <p className="text-default-600 text-md font-medium mb-4">
+            How to play
+          </p>
           <div className="border border-default-300 rounded p-4">
             <ol className="list-decimal list-inside text-sm">
               <li className="mb-2">
-                Lets get this party started, <span className="font-semibold">bois!</span>
+                Lets get this party started,{" "}
+                <span className="font-semibold">bois!</span>
+              </li>
+              <li className="mb-2">Select your outcomes of the games below.</li>
+              <li className="mb-2">
+                Each correct prediction will be worth{" "}
+                <span className="font-semibold">3 points</span>.
               </li>
               <li className="mb-2">
-                Select your outcomes of the games below.
+                Check your score by clicking the{" "}
+                <span className="font-semibold">leaderboard</span> tab.
               </li>
               <li className="mb-2">
-                Each correct prediction will be worth <span className="font-semibold">3 points</span>.
+                The winner will take home the{" "}
+                <span className="font-semibold">pot</span>.
               </li>
               <li className="mb-2">
-                Check your score by clicking the <span className="font-semibold">leaderboard</span> tab.
-              </li>
-              <li className="mb-2">
-                The winner will take home the <span className="font-semibold">pot</span>.
-              </li>
-              <li className="mb-2">
-                Enjoy the <span className="font-semibold">jubbly</span> experience!
+                Enjoy the <span className="font-semibold">jubbly</span>{" "}
+                experience!
               </li>
             </ol>
           </div>
@@ -136,7 +148,7 @@ export default function SweepstakeIndex() {
                 sweepstake.matches.map((match: ShortMatch, index: number) => (
                   <div
                     key={`match_${index}`}
-                    className="flex gap-2 border border-1 border-default-400 items-start justify-center bg-[#ffffff20] p-2 rounded-lg"
+                    className="flex gap-2 border border-1 border-default-400 items-start justify-center p-2 rounded-lg"
                   >
                     <div className="flex gap-1 w-[150px] truncate items-center justify-end">
                       <div>{match.home_team.short_name}</div>
@@ -153,7 +165,7 @@ export default function SweepstakeIndex() {
                     <div className="flex flex-col justify-center">
                       <div className="flex gap-2">
                         <Button
-                          onClick={() =>
+                          onPress={() =>
                             setSelections({ ...selections, [match.id]: "Home" })
                           }
                           variant={
@@ -167,7 +179,7 @@ export default function SweepstakeIndex() {
                           W
                         </Button>
                         <Button
-                          onClick={() =>
+                          onPress={() =>
                             setSelections({ ...selections, [match.id]: "Draw" })
                           }
                           variant={
@@ -181,7 +193,7 @@ export default function SweepstakeIndex() {
                           D
                         </Button>
                         <Button
-                          onClick={() =>
+                          onPress={() =>
                             setSelections({ ...selections, [match.id]: "Away" })
                           }
                           variant={
@@ -232,13 +244,32 @@ export default function SweepstakeIndex() {
           )}
           <div className="max-sm:fixed max-sm:sticky box-border bottom-0 bg-black">
             <Button
-              variant="solid"
-              color="success"
-              onClick={() => submit()}
+              variant="faded"
+              color={
+                Object.keys(selections).length !== sweepstake?.matches?.length
+                  ? "danger"
+                  : "success"
+              }
+              onPress={() => submit()}
               fullWidth
               className="mt-4 max-sm:mb-4"
+              isDisabled={
+                Object.keys(selections).length !== sweepstake?.matches?.length
+              }
             >
-              Save
+              {selections && sweepstake?.matches?.length ? (
+                Object.keys(selections).length !==
+                sweepstake?.matches?.length ? (
+                  <span>
+                    {Object.keys(selections).length} /{" "}
+                    {sweepstake.matches.length} selections
+                  </span>
+                ) : (
+                  "Save"
+                )
+              ) : (
+                <Spinner />
+              )}
             </Button>
           </div>
         </Tab>

@@ -32,7 +32,7 @@ export default function UpcomingMatchesTable() {
             format(match.utc_date),
             <Button
               key={match.id}
-              onClick={() =>
+              onPress={() =>
                 user
                   ? openModal("place-bet", match)
                   : openModal("auth", { initialType: "login" })

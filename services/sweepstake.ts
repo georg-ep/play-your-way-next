@@ -44,7 +44,7 @@ export const sweepstakeServices = () => {
     try {
       return await apiSubmitSelections(id, selections);
     } catch (e) {
-      throw new Error("Error submitting selections");
+      throw e;
     }
   };
 

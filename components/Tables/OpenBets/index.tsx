@@ -51,7 +51,7 @@ export default function OpenBetsTable() {
           bet.match_name,
           `£${bet.amount}`,
           <Button
-            onClick={() => acceptBet(bet)}
+            onPress={() => acceptBet(bet)}
             size="sm"
             key={`button_${index}`}
             variant="flat"

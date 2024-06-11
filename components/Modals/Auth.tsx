@@ -90,7 +90,8 @@ export default function AuthModal() {
         toast.success("Logged in");
         break;
       case "register":
-        await register({ username, email, password });
+        const res = await register({ username, email, password });
+        console.log(res);
         closeModal();
         toast.success("Registered successfully");
     }

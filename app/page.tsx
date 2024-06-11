@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tab, Tabs, ThemeColors } from "@nextui-org/react";
 import { User, useUserStore } from "@/stores/user";
 import { ShortTeam } from "@/interfaces/models/Team";

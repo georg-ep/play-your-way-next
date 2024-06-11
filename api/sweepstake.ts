@@ -28,7 +28,7 @@ export async function apiLeaderboard(id: number): Promise<any> {
     return data.results;
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
-    throw error; // Propagate the error to the caller
+    throw error;
   }
 }
 
@@ -43,7 +43,6 @@ export async function apiSubmitSelections(id: number, selections: FullTimeSelect
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    console.error("Error submitting selections:", error);
-    throw error; // Propagate the error to the caller
+    throw error;
   }
 }

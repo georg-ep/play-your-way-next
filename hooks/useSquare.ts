@@ -59,6 +59,10 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
     async function createPayment(token: string) {
       const amount = document.getElementById("deposit-amount").value;
       if (!amount) throw new Error("Could not find deposit amount");
+      if (amount && amount > 10) {
+        toast.error('Amount cannot be greater than £10');
+        throw new Error("Amount cannot be greater than £10");
+      } 
 
       const body = JSON.stringify({
         locationId,
