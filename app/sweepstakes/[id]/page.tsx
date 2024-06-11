@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import LeaderboardTable from "@/components/Tables/Leaderboard";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import { useUIStore } from "@/stores/ui";
+import { userServices } from "@/services/user";
 
 export interface FullTimeSelection {
   [match_id: number]: "Home" | "Draw" | "Away";
@@ -31,6 +32,7 @@ export default function SweepstakeIndex() {
   const params = useParams();
   const { fetchSweepstakeDetail, submitSelections } = sweepstakeServices();
   const { openModal } = useUIStore();
+  const {fetchUser} = userServices();
   const [sweepstake, setSweepstake] = useState<Sweepstake | null>(null);
   const [selections, setSelections] = useState<FullTimeSelection>({});
   const router = useRouter();
@@ -61,7 +63,13 @@ export default function SweepstakeIndex() {
   const submit = async () => {
     try {
       await submitSelections(Number(params.id), selections);
-      toast.success("Submitted selections");
+      if (!sweepstake.has_entered) {
+        await fetchUser();
+        setSweepstake({ ...sweepstake, has_entered: true });
+        openModal("entered-sweepstake")
+      } else {
+        toast.success("Submitted selections");
+      }
     } catch (e) {
       toast.error(e.response?.detail ?? "Error submitting selections");
       if (e.response?.detail?.includes("credits")) {
@@ -264,8 +272,10 @@ export default function SweepstakeIndex() {
                     {Object.keys(selections).length} /{" "}
                     {sweepstake.matches.length} selections
                   </span>
+                ) : sweepstake.has_entered ? (
+                  "Save Changes"
                 ) : (
-                  "Save"
+                  "Enter Sweepstake"
                 )
               ) : (
                 <Spinner />

@@ -2,6 +2,7 @@
 import AuthModal from "./Auth";
 import ConfirmBetModal from "./ConfirmBet";
 import DepositModal from "./Deposit";
+import EnteredSweepstakeModal from "./EnteredSweepstake";
 import PlaceBetModal from "./PlaceBet";
 import { useUIStore } from "@/stores/ui";
 
@@ -16,5 +17,7 @@ export default function Modals() {
       return <DepositModal />;
     case "confirm-bet":
       return <ConfirmBetModal />
+    case "entered-sweepstake":
+      return <EnteredSweepstakeModal />
   }
 }

@@ -29,6 +29,7 @@ export interface Sweepstake {
   id: number;
   name: string;
   selections: FullTimeSelection[];
+  has_entered?: boolean;
 }
 
 export default function SweepstakesTable() {

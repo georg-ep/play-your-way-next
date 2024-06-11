@@ -13,12 +13,12 @@ import { ModalProps } from "@/interfaces/components/Modal";
 import { useUIStore } from "@/stores/ui";
 
 export default function Modal({
-  title,
+  title = "",
   body,
-  onSubmit,
+  onSubmit = () => null,
   showActions = true,
-  submitText = 'Submit',
-  className='',
+  submitText = "Submit",
+  className = "",
 }: ModalProps) {
   const { isModalOpen, closeModal } = useUIStore();
 
@@ -29,23 +29,23 @@ export default function Modal({
       isKeyboardDismissDisabled={false}
       isDismissable={false}
       className={className}
-      placement={'top-center'}
+      placement={"top-center"}
       scrollBehavior="normal"
     >
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
           <ModalBody>{body}</ModalBody>
-          {showActions && (
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={closeModal}>
-                Close
-              </Button>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={closeModal}>
+              Close
+            </Button>
+            {showActions && (
               <Button color="primary" onPress={onSubmit}>
                 {submitText}
               </Button>
-            </ModalFooter>
-          )}
+            )}
+          </ModalFooter>
         </>
       </ModalContent>
     </NextUIModal>

@@ -69,12 +69,6 @@ export default function AuthModal() {
               onValueChange: setPassword,
               isRequired: true,
             },
-            // {
-            //   key: "dob",
-            //   value: dob,
-            //   onValueChange: setDob,
-            //   isRequired: true,
-            // },
           ],
         };
     }
@@ -82,16 +76,14 @@ export default function AuthModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { initialType } = modalData;
-    switch (initialType) {
+    switch (authView) {
       case "login":
         await login({ email, password });
         closeModal();
         toast.success("Logged in");
         break;
       case "register":
-        const res = await register({ username, email, password });
-        console.log(res);
+        await register({ username, email, password });
         closeModal();
         toast.success("Registered successfully");
     }
@@ -99,7 +91,6 @@ export default function AuthModal() {
 
   return (
     <Modal
-      title=""
       className="capitalize"
       showActions={false}
       body={
@@ -133,7 +124,6 @@ export default function AuthModal() {
                           className="mb-4"
                         />
                       )
-                      // : <Calendar showMonthAndYearPickers value={value} onValueChange={onValueChange}  />
                     )}
                     <div className='flex justify-end w-full'>
                     <Button type="submit" variant="flat" color="primary">Submit</Button>
