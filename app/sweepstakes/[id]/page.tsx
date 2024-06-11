@@ -96,8 +96,8 @@ export default function SweepstakeIndex() {
                 <p className="text-[32px] text-center font-bold">
                   {sweepstake.name}
                 </p>
-                <p className="text-lg text-center text-default-600">
-                  {format(sweepstake.start_date)}
+                <p className="text-md mb-8 text-center text-default-600">
+                  {format(sweepstake.start_date)} - {format(sweepstake.end_date)}
                 </p>
                 <div className="my-2 flex flex-wrap justify-center gap-2">
                   <Chip variant="dot" color="success">
