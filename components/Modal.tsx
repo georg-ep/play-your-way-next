@@ -26,11 +26,11 @@ export default function Modal({
     <NextUIModal
       isOpen={isModalOpen}
       onOpenChange={closeModal}
-      isDismissable={true}
-      isKeyboardDismissDisabled={true}
+      isKeyboardDismissDisabled={false}
+      isDismissable={false}
       className={className}
       placement={'top-center'}
-      scrollBehavior="outside"
+      scrollBehavior="normal"
     >
       <ModalContent>
         <>
