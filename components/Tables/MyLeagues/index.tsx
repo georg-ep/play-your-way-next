@@ -153,6 +153,7 @@ export default function MyLeaguesTable() {
                 onPress={() =>
                   router.push(`/leagues/${league.code}/`)
                 }
+                key={league.code}
                 fullWidth
                 size="sm"
                 color="primary"
