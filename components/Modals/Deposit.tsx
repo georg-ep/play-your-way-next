@@ -16,23 +16,24 @@ export default function DepositModal() {
         body={
           <>
             {" "}
-            <Input
-              id={"deposit-amount"}
-              key={"password"}
-              value={amount}
-              onValueChange={setAmount}
-              type="number"
-              label="Deposit amount"
-              isRequired
-            />
             <form hidden={loading} id="payment-form">
-              <Card className='p-4 mb-4 rounded-sm text-sm border border-1 border-default-400'>
-                <div className='font-bold'>Deposit info for test credits</div>
+              <Card className="p-4 mb-4 rounded-sm text-sm border border-1 border-default-400">
+                <div className="font-bold">Deposit info for test credits</div>
                 <div>Card Number: 5105 1051 0510 5100</div>
                 <div>Rest of the details can be random</div>
               </Card>
               <div id="apple-pay-button"></div>
               <div id="card-container"></div>
+              <Input
+                id={"deposit-amount"}
+                key={"password"}
+                value={amount}
+                onValueChange={setAmount}
+                type="number"
+                label="Deposit amount"
+                isRequired
+                className="mb-4"
+              />
               <Button
                 color="primary"
                 id="card-button"

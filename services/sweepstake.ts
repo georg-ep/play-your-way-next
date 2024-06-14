@@ -1,15 +1,29 @@
 import { useSweepstakeStore } from "@/stores/sweepstake";
 import {
+  apiFindPrivateLeague,
   apiLeaderboard,
   apiSubmitSelections,
   apiSweepstakeDetail,
   apiSweepstakes,
+  apiJoinPrivateLeague,
+  apiMyPrivateLeagues,
+  apiFetchPrivateLeague,
 } from "@/api/sweepstake";
 import { Sweepstake } from "@/components/Tables/Sweepstakes";
 import { FullTimeSelection } from "@/app/sweepstakes/[id]/page";
 
 export const sweepstakeServices = () => {
-  const { sweepstakes, setSweepstakes, setSweepstake, leaderboard, setLeaderboard } = useSweepstakeStore();
+  const {
+    sweepstakes,
+    setSweepstakes,
+    setSweepstake,
+    leaderboard,
+    setLeaderboard,
+    privateLeagues,
+    setPrivateLeagues,
+    setPrivateLeague,
+    privateLeague,
+  } = useSweepstakeStore();
 
   const fetchSweepstakes = async (): Promise<Sweepstake[]> => {
     try {
@@ -24,16 +38,59 @@ export const sweepstakeServices = () => {
     }
   };
 
-  const fetchLeaderboard = async (id: number): Promise<any> => {
+  const fetchLeaderboard = async (
+    id: number
+  ): Promise<{ id: number; items: any[] }> => {
     try {
-      let _leaderboard = leaderboard;
-      if (!_leaderboard) {
-        _leaderboard = await apiLeaderboard(id);
-        setLeaderboard(_leaderboard);
+      if (leaderboard?.id === id) {
+        return leaderboard;
       }
+      const items = await apiLeaderboard(id);
+      const _leaderboard = { id, items };
+      setLeaderboard(_leaderboard);
       return _leaderboard;
     } catch (e) {
-      throw new Error("Error fetching open bets");
+      throw new Error("Error fetching leaderboard");
+    }
+  };
+
+  const findPrivateLeague = async (code: string): Promise<any> => {
+    try {
+      return await apiFindPrivateLeague(code);
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const myPrivateLeagues = async (): Promise<any> => {
+    try {
+      let leagues = privateLeagues;
+      if (!leagues) {
+        const _leagues = await apiMyPrivateLeagues();
+        setPrivateLeagues(_leagues);
+      }
+      return privateLeagues;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const fetchPrivateLeague = async (code: string): Promise<any> => {
+    try {
+      setSweepstake(null);
+      const league = await apiFetchPrivateLeague(code);
+      setPrivateLeague(league);
+      return league;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const joinPrivateLeague = async (code: string): Promise<any> => {
+    try {
+      return await apiJoinPrivateLeague(code);
+    } catch (e) {
+      throw e;
     }
   };
 
@@ -50,6 +107,7 @@ export const sweepstakeServices = () => {
 
   const fetchSweepstakeDetail = async (id: number): Promise<Sweepstake> => {
     try {
+      setSweepstake(null);
       const sweepstake: Sweepstake = await apiSweepstakeDetail(id);
       setSweepstake(sweepstake);
       return sweepstake;
@@ -63,5 +121,9 @@ export const sweepstakeServices = () => {
     fetchSweepstakeDetail,
     submitSelections,
     fetchLeaderboard,
+    findPrivateLeague,
+    joinPrivateLeague,
+    myPrivateLeagues,
+    fetchPrivateLeague,
   };
 };

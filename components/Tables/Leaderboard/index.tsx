@@ -1,17 +1,24 @@
 import { TableData } from "@/app/page";
 import Table from "@/components/Table";
-import { TableProps, TableRowData } from "@/interfaces/components/Table";
+import {
+  TableHeader,
+  TableProps,
+  TableRowData,
+} from "@/interfaces/components/Table";
 import { sweepstakeServices } from "@/services/sweepstake";
+import { useSweepstakeStore } from "@/stores/sweepstake";
 import { Spinner } from "@nextui-org/react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function LeaderboardTable() {
   const { fetchLeaderboard } = sweepstakeServices();
+  const {privateLeague, currentSweepstake} = useSweepstakeStore()
   const [leaderboardData, setLeaderboardData] = useState<TableProps | null>(
     null
   );
   const params = useParams();
+  const path = usePathname();
 
   useEffect(() => {
     setTableData();
@@ -19,14 +26,19 @@ export default function LeaderboardTable() {
 
   const setTableData = async () => {
     try {
-      let headers: string[] = [];
+      let headers: TableHeader[] = [];
       let rows: TableRowData[] = [];
-      headers = ["User", "Points"];
-      const leaderboard = await fetchLeaderboard(Number(params.id));
-      console.log("leaderboard", leaderboard);
-      leaderboard.forEach((row) => {
+      headers = [
+        { label: "Rank", width: '10%' },
+        { label: "User" },
+        { label: "Points" },
+      ];
+      const id = path.includes('league') ? privateLeague?.sweepstake?.id : currentSweepstake.id;
+      const leaderboard = await fetchLeaderboard(id);
+      leaderboard.items.forEach((row, index) => {
         rows.push({
-          cells: [row.user.username, row.points],
+          styling: `${['bg-success bg-opacity-40', 'bg-success bg-opacity-30', 'bg-success bg-opacity-20'][index]}`,
+          cells: [index + 1, row.user.username, row.points],
         });
       });
       setLeaderboardData({

@@ -8,6 +8,7 @@ import OpenBetsTable from "@/components/Tables/OpenBets";
 import LiveBetsTable from "@/components/Tables/LiveBets";
 import UpcomingMatchesTable from "@/components/Tables/UpcomingMatches";
 import SweepstakesTable from "@/components/Tables/Sweepstakes";
+import MyLeaguesTable from "@/components/Tables/MyLeagues";
 
 export interface TableData {
   title: string;
@@ -37,9 +38,11 @@ export default function Home() {
   const [tab, setTab] = useState<string>("live");
 
   return (
-    <main className="dark flex min-h-screen flex-col items-center justify-between max-sm:px-2 max-sm:py-6 md:p-12">
+    <main className="dark flex min-h-screen flex-col items-center justify-between px-2 py-6 md:p-12">
       <div className="flex justify-start flex-col w-full mb-4">
         <Tabs
+          fullWidth
+          variant="bordered"
           onSelectionChange={(e: any) => setTab(e)}
           aria-label="Navigation"
           disabledKeys={user ? [] : ["open-bets", "my-bets"]}
@@ -48,7 +51,10 @@ export default function Home() {
           <Tab key='sweepstakes' title='Sweepstakes'>
             <SweepstakesTable />
           </Tab>
-          <Tab key="live" title="Live matches">
+          <Tab key='leagues' title='Private Leagues'>
+            <MyLeaguesTable />
+          </Tab>
+          {/* <Tab key="live" title="Live matches">
             <LiveBetsTable />
           </Tab>
           <Tab key="upcoming" title="Upcoming matches">
@@ -59,7 +65,7 @@ export default function Home() {
           </Tab>
           <Tab key="open-bets" title="Open bets">
             <OpenBetsTable />
-          </Tab>
+          </Tab> */}
         </Tabs>
       </div>
     </main>

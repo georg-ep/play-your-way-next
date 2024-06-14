@@ -41,7 +41,7 @@ export default function MyBetsTable() {
             </Chip>
           </div>,
           bet.match_name,
-          `£${bet.amount}`,
+          `£${Number(bet.amount) * 2}`,
           bet.opponent?.username,
         ],
       });

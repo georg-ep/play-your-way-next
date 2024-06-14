@@ -54,9 +54,11 @@ export default function Header() {
   };
 
   return (
-    <Navbar isBordered maxWidth="full" className="px-[0]" position="sticky">
+    <Navbar classNames={{ wrapper: ['px-3 md:px-6'] }} isBordered maxWidth="full" position="sticky">
       <NavbarBrand>
+        <Link className="text-white" href="/">
         <p className="font-bold text-inherit">PlayYourWay</p>
+        </Link>
       </NavbarBrand>
       <NavbarContent justify="end">
         {loading ? (

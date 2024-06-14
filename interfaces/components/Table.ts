@@ -10,10 +10,16 @@ export interface TableAction {
 
 export interface TableRowData {
   cells: (string | React.ReactNode)[];
+  styling?: string;
+}
+
+export interface TableHeader {
+  label: string;
+  width?: string;
 }
 
 export interface TableProps {
-  headers: string[];
+  headers: string[] | TableHeader[];
   rows: TableRowData[];
   onRowClick?: (rowIdx: number) => void;
 }

@@ -17,8 +17,8 @@ export default function Table({ headers, rows, onRowClick }: TableProps) {
       <TableHeader>
         {headers &&
           headers.map((header, index) => (
-            <TableColumn key={`header_${index}`}>
-              <div className="text-white">{header}</div>
+            <TableColumn width={header?.width ?? 'auto'} key={`header_${index}`}>
+              <div className="text-white">{ typeof(header) === 'object' ? header.label : header}</div>
             </TableColumn>
           ))}
       </TableHeader>
@@ -26,7 +26,7 @@ export default function Table({ headers, rows, onRowClick }: TableProps) {
         {rows &&
           rows.map((row, rowIdx) => (
             <TableRow
-              className="cursor-pointer hover:outline hover:outline-1 hover:outline-gray-700 box-border transition-all"
+              className={`${row?.styling} cursor-pointer mb-2`}
               onClick={() => onRowClick && onRowClick(rowIdx)}
               key={`row_${rowIdx}`}
             >

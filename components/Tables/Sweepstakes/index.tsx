@@ -92,9 +92,9 @@ export default function SweepstakesTable() {
       {sweepstakes.map((sstake, index) => (
         <div
           key={`ss_${index}`}
-          className="border border-1 border-default-400 flex w-full justify-between rounded-lg p-4"
+          className="border border-1 border-default-400 flex w-full justify-between rounded-lg md:p-4 p-2"
         >
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between pr-2 md:pr-4">
             <div>
               <div className="text-lg font-bold">{sstake.name}</div>
               <div className="text-sm text-default-500">
@@ -111,7 +111,7 @@ export default function SweepstakesTable() {
             </Button>
           </div>
           <div>
-            <div className="border-l border-l-1 border-default-400 pl-2 flex flex-col gap-2 justify-center">
+            <div className="border-l border-l-1 border-default-400 pl-1 md:pl-2 flex flex-col gap-2 justify-center">
               <Chip
                 variant="light"
                 color="default"

@@ -32,6 +32,42 @@ export async function apiLeaderboard(id: number): Promise<any> {
   }
 }
 
+export async function apiFindPrivateLeague(code: string): Promise<any> {
+  try {
+    const data = await request(`sweepstakes/private/find/${code}/`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function apiFetchPrivateLeague(code: string): Promise<any> {
+  try {
+    const data = await request(`sweepstakes/private/${code}/`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function apiJoinPrivateLeague(code: string): Promise<any> {
+  try {
+    const data = await request(`sweepstakes/private/join/${code}/`, { method: "PATCH" });
+    return data
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function apiMyPrivateLeagues(): Promise<any> {
+  try {
+    const data: ListAPIResponse = await request(`sweepstakes/private/mine/`);
+    return data.results;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function apiSubmitSelections(id: number, selections: FullTimeSelection) {
   const payload = {
     sweepstake: id,
