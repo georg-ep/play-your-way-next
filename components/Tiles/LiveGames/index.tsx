@@ -35,7 +35,7 @@ export default function LiveGamesTile() {
       } transition-all duration-500 ease overflow-hidden`}
     >
       <div className="font-bold text-white text-[20px] mb-2">Live Games</div>
-      <div className="grid gap-2 grid-cols-2">
+      <div className="grid gap-2 md:grid-cols-2 grid-cols-1">
         {liveGames &&
           liveGames.map((game) => (
             <Card
