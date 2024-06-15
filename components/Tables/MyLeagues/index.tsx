@@ -51,6 +51,8 @@ export default function MyLeaguesTable() {
       try {
         await joinPrivateLeague(leagueFound.code);
         await fetchUser();
+        router.push(`/leagues/${leagueFound.code}/`);
+        toast.success("Successfully joined: " + leagueFound.name);
       } catch (e) {
         toast.error(e.response?.detail ?? "Error joining league");
       }

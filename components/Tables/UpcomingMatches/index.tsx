@@ -49,7 +49,6 @@ export default function UpcomingMatchesTable() {
       _tableData.push({ title: competition.name, rows: _rows });
     });
     setData(_tableData);
-    console.log(_tableData);
   };
 
   return (

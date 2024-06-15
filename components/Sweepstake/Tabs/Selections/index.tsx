@@ -30,6 +30,8 @@ export default function SelectionsTab() {
         {}
       );
       setSelections(_selections);
+    } else if (selections) {
+      setSelections(selections);
     } else {
       setSelections({});
     }
@@ -61,6 +63,11 @@ export default function SelectionsTab() {
             <MatchTile
               key={`match_${index}`}
               match={match}
+              outcome={
+                sweepstake.selections.find(
+                  (selection) => selection.match === match.id
+                )?.correct_outcome
+              }
               selections={selections}
               setSelections={setSelections}
             />
