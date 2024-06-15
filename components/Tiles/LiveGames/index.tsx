@@ -10,7 +10,7 @@ export default function LiveGamesTile() {
 
   useEffect(() => {
     try {
-      const ws = new WebSocket("wss://e97b-2a02-6b6f-f820-ad00-443d-26d-e564-a48d.ngrok-free.app/ws/chat/");
+      const ws = new WebSocket("wss://a4d9-2a02-6b6f-f820-ad00-c070-99a-1f2a-7496.ngrok-free.app/ws/chat/");
       // const ws = new WebSocket("ws://localhost:8080/ws/chat/");
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
