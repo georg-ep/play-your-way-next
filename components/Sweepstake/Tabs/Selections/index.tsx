@@ -64,7 +64,7 @@ export default function SelectionsTab() {
               key={`match_${index}`}
               match={match}
               outcome={
-                sweepstake.selections.find(
+                sweepstake?.selections?.find(
                   (selection) => selection.match === match.id
                 )?.correct_outcome
               }
