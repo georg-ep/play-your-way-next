@@ -9,7 +9,7 @@ export async function request<T>(
   }
 ): Promise<T> {
   const BASE_URL =
-    "https://a4d9-2a02-6b6f-f820-ad00-c070-99a-1f2a-7496.ngrok-free.app/api/";
+    "https://definite-condor-annually.ngrok-free.app/api/";
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",

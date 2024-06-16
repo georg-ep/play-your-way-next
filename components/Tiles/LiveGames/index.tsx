@@ -7,20 +7,26 @@ import { Chip } from "@nextui-org/chip";
 
 export default function LiveGamesTile() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
-
+  
+  
   useEffect(() => {
+    const ws = new WebSocket("https://definite-condor-annually.ngrok-free.app/ws/live-games/?ngrok-skip-browser-warning=true");
     try {
-      const ws = new WebSocket("wss://a4d9-2a02-6b6f-f820-ad00-c070-99a-1f2a-7496.ngrok-free.app/ws/chat/");
-      // const ws = new WebSocket("ws://localhost:8080/ws/chat/");
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data?.live_matches) {
           setLiveGames(data.live_matches);
         }
       };
+      ws.onopen = (e) => {
+        console.log(e);
+      }
       ws.onerror = (e) => {
-        console.log("ERROR", e);
+        console.log(e);
       };
+      ws.onclose = (e) => {
+        console.log(e);
+      }
     } catch (e) {
       console.log(e);
     }
