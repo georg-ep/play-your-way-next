@@ -10,7 +10,7 @@ export default function LiveGamesTile() {
   
   
   useEffect(() => {
-    const ws = new WebSocket("https://cf90e7768a77ab33aca754521d93028f.serveo.net/ws/live-games/?ngrok-skip-browser-warning=true");
+    const ws = new WebSocket("wss://cf90e7768a77ab33aca754521d93028f.serveo.net/ws/live-games/?ngrok-skip-browser-warning=true");
     try {
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
