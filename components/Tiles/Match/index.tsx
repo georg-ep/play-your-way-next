@@ -24,11 +24,13 @@ export default function MatchTile({
   return (
     <div
       className={`flex gap-2 border border-1 border-default-400 items-start justify-center py-8 rounded-lg ${
-        outcome === true
-          ? "border-success"
-          : outcome === false
-          ? "border-[#F31260]"
-          : ""
+        match.status === "FINISHED"
+          ? outcome === true
+            ? "border-success"
+            : "border-[#C20E4D]"
+          : match.status === "IN_PLAY" || match.status === "PAUSED"
+          ? "border-warning"
+          : null
       }`}
     >
       <TeamTile team={match.home_team} />
@@ -59,19 +61,21 @@ export default function MatchTile({
         <div className={`inline-flex justify-center items-center mt-2`}>
           <Chip
             startContent={
-              outcome === true ? (
-                <FaCheckCircle className="ml-2" color="green" />
-              ) : outcome === false ? (
-                <FaCircleXmark color="red" className="ml-2" />
+              match.status === "FINISHED" ? (
+                outcome === true ? (
+                  <FaCheckCircle className="ml-2" color="#12A150" />
+                ) : (
+                  <FaCircleXmark color="#F31260" className="ml-2" />
+                )
               ) : null
             }
             variant="faded"
             size="lg"
             color={
-              outcome === true
-                ? "success"
-                : outcome === false
-                ? "danger"
+              match.status === "FINISHED"
+                ? outcome === true
+                  ? "success"
+                  : "danger"
                 : "default"
             }
             className={`text-[10px]`}

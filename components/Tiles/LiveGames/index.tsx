@@ -10,7 +10,7 @@ export default function LiveGamesTile() {
   
   
   useEffect(() => {
-    const ws = new WebSocket("wss://cf90e7768a77ab33aca754521d93028f.serveo.net/ws/live-games/?ngrok-skip-browser-warning=true");
+    const ws = new WebSocket("wss://cf90e7768a77ab33aca754521d93028f.serveo.net/ws/live-games/");
     try {
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
@@ -42,12 +42,12 @@ export default function LiveGamesTile() {
       } transition-all duration-500 ease overflow-hidden`}
     >
       <div className="font-bold text-white text-[20px] mb-2">Live Games</div>
-      <div className="grid gap-2 md:grid-cols-2 grid-cols-1">
+      <div className="grid gap-2 md:grid-cols-2 grid-cols-1 mb-8">
         {liveGames &&
           liveGames.map((game) => (
             <Card
               key={game.id}
-              className="mb-4 p-4 flex justify-center flex-row items-center"
+              className="p-4 flex justify-center flex-row items-center border border-2 border-default-400 bg-transparent"
             >
               <Team team={game?.home_team} />
               <div className="text-center min-w-[100px]">

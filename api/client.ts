@@ -13,7 +13,6 @@ export async function request<T>(
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": 'true',
   };
   if (getCookie("access")) {
     options.headers = {

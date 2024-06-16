@@ -15,7 +15,7 @@ import { useUIStore } from "@/stores/ui";
 import { RiMoneyPoundCircleFill } from "react-icons/ri";
 import { IoIosFootball } from "react-icons/io";
 import { FaPeopleGroup } from "react-icons/fa6";
-import { GrMoney } from "react-icons/gr";
+import { FaDoorOpen } from "react-icons/fa";
 
 export interface Sweepstake {
   matches: ShortMatch[];
@@ -92,7 +92,7 @@ export default function SweepstakesTable() {
       {sweepstakes.map((sstake, index) => (
         <div
           key={`ss_${index}`}
-          className="border border-1 border-default-400 flex w-full justify-between rounded-lg md:p-4 p-2"
+          className="border max-sm:border-l-0 max-sm:border-t-0 max-sm:border-r-0 max-sm:border-b-0 border-2 border-default-400 flex w-full justify-between rounded-none md:rounded-lg md:p-4 px-0 py-4"
         >
           <div className="flex flex-col justify-between pr-2 md:pr-4">
             <div>
@@ -104,31 +104,33 @@ export default function SweepstakesTable() {
             <Button
               onPress={() => handleRowClick(index)}
               variant="faded"
-              className="mt-4"
+              className="mt-4 bg-transparent"
               color="warning"
             >
               View Sweepstake
             </Button>
           </div>
-          <div>
-            <div className="border-l border-l-1 border-default-400 pl-1 md:pl-2 flex flex-col gap-2 justify-center">
+          <div className='flex'>
+            <div className="max-w-[180px] box-border pl-1 md:pl-2 flex flex-col gap-2 justify-center">
               <Chip
-                variant="light"
-                color="default"
+                variant="bordered"
+                className='p-3 w-full text-center text-white max-w-none'
+                color='secondary'
                 startContent={<RiMoneyPoundCircleFill size={20} />}
               >
                 {sstake.entry_cost * sstake.participants}.00 Total Pot
               </Chip>
               <Chip
-                variant="light"
-                color={sstake.type.color}
+                variant="bordered"
+                className='p-3 w-full text-center max-w-none'
                 startContent={<IoIosFootball size={20} />}
               >
                 <span className="text-white">{sstake.type.label}</span>
               </Chip>
               <Chip
                 color="primary"
-                variant="light"
+                className='p-3 w-full text-center max-w-none'
+                variant="bordered"
                 startContent={<FaPeopleGroup size={20} />}
               >
                 <span className="text-white">
@@ -137,12 +139,14 @@ export default function SweepstakesTable() {
               </Chip>
               <Chip
                 color="success"
-                variant="light"
-                startContent={<GrMoney size={20} />}
+                className='p-3 w-full text-center max-w-none'
+                variant="bordered"
+                startContent={<FaDoorOpen size={20} />}
               >
                 <span className="text-white">£{sstake.entry_cost} entry</span>
               </Chip>
             </div>
+            {/* <Chip variant="bordered">In progress</Chip> */}
           </div>
         </div>
       ))}
