@@ -10,13 +10,14 @@ export default function LiveGamesTile() {
   
   
   useEffect(() => {
-    const ws = new WebSocket("https://definite-condor-annually.ngrok-free.app/ws/live-games/?ngrok-skip-browser-warning=true");
+    const ws = new WebSocket("https://cf90e7768a77ab33aca754521d93028f.serveo.net/ws/live-games/?ngrok-skip-browser-warning=true");
     try {
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data?.live_matches) {
           setLiveGames(data.live_matches);
         }
+        console.log(JSON.parse(e.data));
       };
       ws.onopen = (e) => {
         console.log(e);

@@ -9,11 +9,11 @@ export async function request<T>(
   }
 ): Promise<T> {
   const BASE_URL =
-    "https://definite-condor-annually.ngrok-free.app/api/";
+    "https://cf90e7768a77ab33aca754521d93028f.serveo.net/api/";
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "69420",
+    "ngrok-skip-browser-warning": 'true',
   };
   if (getCookie("access")) {
     options.headers = {
