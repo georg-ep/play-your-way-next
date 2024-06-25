@@ -28,8 +28,8 @@ export default function SweepstakeHeader() {
   const status = () => {
     const status = isLeague() ? privateLeague?.status : sweepstake?.status;
     return {
-      name: status === "IN_PROGRESS" ? "In Progress" : "Finished",
-      color: status === "IN_PROGRESS" ? "warning" : "success",
+      name: status === "IN_PROGRESS" ? "In Progress" : status === "NOT_STARTED" ? "Not Started" : "Finished",
+      color: status === "IN_PROGRESS" ? "warning" : status === "NOT_STARTED" ? "primary" : "success",
     };
   };
 
