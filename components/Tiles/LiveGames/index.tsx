@@ -8,12 +8,9 @@ import { Chip } from "@nextui-org/chip";
 export default function LiveGamesTile() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
 
-  const URL = "wss://play-your-way.serveo.net/ws/live-games/";
+  const URL = "wss://play-your-way.co.uk/ws/live-games/";
 
   useEffect(() => {
-    if (URL.startsWith("ws://")) {
-      return;
-    }
     const ws = new WebSocket(URL);
     try {
       ws.onmessage = (e) => {
