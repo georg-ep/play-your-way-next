@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 
 import type { Viewport } from "next";
 import LiveGamesTile from "@/components/Tiles/LiveGames";
+import Footer from "@/components/Footer";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -34,12 +35,21 @@ export default function RootLayout({
   return (
     <html className="dark" lang="en">
       <body className={`${montserrat.className}`}>
-        <Header />
-        <ToastContainer theme="dark" position="top-right" autoClose={5000} />
-        <div className="max-w-[1200px] mx-auto px-2 py-6 md:p-12">
-          <LiveGamesTile />
-          <Modals />
-          {children}
+        <div className="min-h-screen flex flex-col justify-between">
+          <div>
+            <Header />
+            <ToastContainer
+              theme="dark"
+              position="top-right"
+              autoClose={5000}
+            />
+            <div className="max-w-[1200px] mx-auto px-2 py-6 md:p-12">
+              <LiveGamesTile />
+              <Modals />
+              {children}
+            </div>
+          </div>
+          <Footer />
         </div>
       </body>
     </html>

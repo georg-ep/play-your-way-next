@@ -25,11 +25,11 @@ export const sweepstakeServices = () => {
     privateLeague,
   } = useSweepstakeStore();
 
-  const fetchSweepstakes = async (): Promise<Sweepstake[]> => {
+  const fetchSweepstakes = async (force: boolean = false, filters: string = ""): Promise<Sweepstake[]> => {
     try {
       let _sweepstakes = sweepstakes;
-      if (!_sweepstakes) {
-        _sweepstakes = await apiSweepstakes();
+      if (!_sweepstakes || force) {
+        _sweepstakes = await apiSweepstakes(filters);
         setSweepstakes(_sweepstakes);
       }
       return _sweepstakes;

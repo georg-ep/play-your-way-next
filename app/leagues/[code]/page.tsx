@@ -45,7 +45,7 @@ export default function PrivateLeagueIndex() {
 
 
   return (
-    <div className="dark flex min-h-screen text-white flex-col justify-start w-full">
+    <div className="dark flex text-white flex-col justify-start w-full">
       <SweepstakeBreadcrumbs />
       <SweepstakeHeader />
       <SweepstakeTabs />

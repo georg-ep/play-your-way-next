@@ -10,7 +10,7 @@ export default function LiveGamesTile() {
 
   useEffect(() => {
     const ws = new WebSocket(
-      "wss://play-your-way.serveo.net/ws/live-games/"
+      "ws://3.10.140.74/ws/live-games/"
     );
     try {
       ws.onmessage = (e) => {

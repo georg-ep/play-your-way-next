@@ -7,6 +7,9 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
   Spinner,
 } from "@nextui-org/react";
 import { useUIStore } from "@/stores/ui";
@@ -51,16 +54,33 @@ export default function Header() {
       case "register":
         openModal("auth", { initialType: "register" });
     }
+
   };
 
+  const menuItems = [
+    {
+      label: "Profile",
+      onClick: () => router.push("/profile/"),
+    },
+    {
+      label: "Logout",
+      onClick: () => handleClick("logout"),
+    },
+  ];
+
   return (
-    <Navbar classNames={{ wrapper: ['px-3 md:px-6'] }} isBordered maxWidth="full" position="sticky">
+    <Navbar
+      classNames={{ wrapper: ["px-3 md:px-6"] }}
+      isBordered
+      maxWidth="full"
+      position="sticky"
+    >
       <NavbarBrand>
         <Link className="text-white" href="/">
-        <p className="font-bold text-inherit">PlayYourWay</p>
+          <p className="font-bold text-inherit">PlayYourWay</p>
         </Link>
       </NavbarBrand>
-      <NavbarContent justify="end">
+      <NavbarContent className={user ? "max-sm:hidden" : ""} justify="end">
         {loading ? (
           <Spinner color="default" />
         ) : (
@@ -90,10 +110,18 @@ export default function Header() {
               <div className={"flex items-center gap-2"}>
                 <Button
                   disableRipple
+                  variant="flat"
+                  color="success"
+                  size={window.innerWidth < 640 ? "sm" : "md"}
+                >
+                  {user.username}
+                </Button>
+                <Button
+                  disableRipple
                   onPress={() => handleClick("deposit")}
                   variant="flat"
                   color="secondary"
-                  size="md"
+                  size={window.innerWidth < 640 ? "sm" : "md"}
                 >
                   £{user.credits}
                 </Button>
@@ -102,7 +130,7 @@ export default function Header() {
                   disableRipple
                   variant="flat"
                   color="primary"
-                  size="md"
+                  size={window.innerWidth < 640 ? "sm" : "md"}
                 >
                   Logout
                 </Button>
@@ -111,6 +139,27 @@ export default function Header() {
           </>
         )}
       </NavbarContent>
+
+      <NavbarMenu className='px-3'>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              className="w-full"
+              color={
+                index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
+              }
+              onClick={item?.onClick}
+              size="lg"
+            >
+              {item.label}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+
+      {user && <NavbarContent  className="sm:hidden" justify="end">
+        <NavbarMenuToggle />
+      </NavbarContent>}
     </Navbar>
   );
 }

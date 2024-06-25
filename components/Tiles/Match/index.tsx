@@ -10,6 +10,7 @@ export default function MatchTile({
   selections,
   setSelections,
   outcome,
+  disabled = false,
 }) {
   const outcomes = [
     { label: "H", value: "Home", color: "success" },
@@ -23,14 +24,14 @@ export default function MatchTile({
 
   return (
     <div
-      className={`flex gap-2 border border-1 border-default-400 items-start justify-center py-8 rounded-lg ${
+      className={`flex gap-2 border border-1 items-start justify-center py-8 rounded-lg ${
         match.status === "FINISHED"
           ? outcome === true
             ? "border-success"
-            : "border-[#C20E4D]"
+            : "border-danger"
           : match.status === "IN_PLAY" || match.status === "PAUSED"
           ? "border-warning"
-          : null
+          : "border-default-400"
       }`}
     >
       <TeamTile team={match.home_team} />
@@ -43,7 +44,7 @@ export default function MatchTile({
                 setSelections({ ...selections, [match.id]: outcome.value })
               }
               key={outcome.value}
-              isDisabled={matchStarted(match.utc_date)}
+              isDisabled={matchStarted(match.utc_date) || disabled}
               className={`${
                 selections[match.id] === outcome.value
                   ? `border-${outcome.color}`

@@ -2,9 +2,9 @@ import { Sweepstake } from "@/components/Tables/Sweepstakes";
 import { request } from "./client";
 import { ListAPIResponse } from "@/interfaces/api/Response";
 import { FullTimeSelection } from "@/app/sweepstakes/[id]/page";
-export async function apiSweepstakes(): Promise<Sweepstake[]> {
+export async function apiSweepstakes(filters: string): Promise<Sweepstake[]> {
   try {
-    const data: ListAPIResponse = await request("sweepstakes/");
+    const data: ListAPIResponse = await request(`sweepstakes/?${filters}`);
     return data.results;
   } catch (error) {
     console.error("Error fetching sweepstakes:", error);

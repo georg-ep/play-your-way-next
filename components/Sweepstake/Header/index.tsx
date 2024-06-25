@@ -13,10 +13,7 @@ import {
 import { usePathname } from "next/navigation";
 
 export default function SweepstakeHeader() {
-  const {
-    currentSweepstake: sweepstake,
-    privateLeague,
-  } = useSweepstakeStore();
+  const { currentSweepstake: sweepstake, privateLeague } = useSweepstakeStore();
 
   const path = usePathname();
 
@@ -28,10 +25,25 @@ export default function SweepstakeHeader() {
     return isLeague() ? privateLeague?.name : sweepstake?.name;
   };
 
+  const status = () => {
+    const status = isLeague() ? privateLeague?.status : sweepstake?.status;
+    return {
+      name: status === "IN_PROGRESS" ? "In Progress" : "Finished",
+      color: status === "IN_PROGRESS" ? "warning" : "success",
+    };
+  };
+
   return (
-    <Card className="mb-4 p-4">
+    <Card className={`mb-4 p-4 border border-${status().color}`}>
       {name() && sweepstake ? (
-        <CardHeader className="flex gap-3">
+        <CardHeader className="flex flex-col relative">
+          <div
+            className={`relative flex top-[-28px] text-default-600 justify-center text-sm border-l border-b border-r rounded-sm py-1 px-2  border-${
+              status().color
+            }`}
+          >
+            <div>{status().name}</div>
+          </div>
           <div className="w-full">
             <div>
               <p className="text-[32px] text-center font-bold">{name()}</p>

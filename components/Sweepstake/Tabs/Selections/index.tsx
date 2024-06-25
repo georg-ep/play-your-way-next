@@ -55,6 +55,12 @@ export default function SelectionsTab() {
     }
   };
 
+  const allSelectionsMade = () => {
+    return Object.keys(selections).length >= sweepstake?.matches?.length;
+  };
+
+  const hasFinished = () => sweepstake?.has_finished;
+
   return (
     <>
       {sweepstake && sweepstake.matches ? (
@@ -63,6 +69,7 @@ export default function SelectionsTab() {
             <MatchTile
               key={`match_${index}`}
               match={match}
+              disabled={!sweepstake.has_entered && sweepstake.status === 'IN_PROGRESS'}
               outcome={
                 sweepstake?.selections?.find(
                   (selection) => selection.match === match.id
@@ -81,24 +88,22 @@ export default function SelectionsTab() {
       <div className="max-sm:fixed max-sm:sticky box-border bottom-0 bg-black">
         <Button
           variant="faded"
-          color={
-            Object.keys(selections).length < sweepstake?.matches?.length
-              ? "danger"
-              : "success"
-          }
+          color={!allSelectionsMade() ? "danger" : "success"}
           onPress={() => submit()}
           fullWidth
           className="mt-4 max-sm:mb-4"
-          isDisabled={
-            Object.keys(selections).length < sweepstake?.matches?.length
-          }
+          isDisabled={!allSelectionsMade() || hasFinished()}
         >
           {selections && sweepstake?.matches?.length ? (
-            Object.keys(selections).length < sweepstake?.matches?.length ? (
+            !sweepstake.has_entered && sweepstake.status === 'IN_PROGRESS' ? (
+              <>In Progress</>
+            ) : !allSelectionsMade() ? (
               <span>
                 {Object.keys(selections).length} / {sweepstake.matches.length}{" "}
                 selections
               </span>
+            ) : hasFinished() ? (
+              <>Sweepstake Finished</>
             ) : sweepstake.has_entered ? (
               "Save Changes"
             ) : (

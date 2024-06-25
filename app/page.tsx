@@ -38,7 +38,7 @@ export default function Home() {
   const [tab, setTab] = useState<string>("live");
 
   return (
-    <main className="dark flex min-h-screen flex-col items-center justify-between">
+    <main className="dark flex flex-col items-center justify-between">
       <div className="flex justify-start flex-col w-full mb-4">
         <Tabs
           fullWidth
