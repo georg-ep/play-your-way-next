@@ -9,7 +9,7 @@ export async function request<T>(
   }
 ): Promise<T> {
   const BASE_URL =
-    "http://3.9.72.166/api/";
+    "https://play-your-way.serveo.net/api/";
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",

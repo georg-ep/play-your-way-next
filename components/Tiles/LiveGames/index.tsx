@@ -8,7 +8,7 @@ import { Chip } from "@nextui-org/chip";
 export default function LiveGamesTile() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
 
-  const URL = "ws://3.10.140.74/ws/live-games/";
+  const URL = "wss://play-your-way.serveo.net/ws/live-games/";
 
   useEffect(() => {
     if (URL.startsWith("ws://")) {
