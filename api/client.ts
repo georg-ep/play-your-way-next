@@ -9,7 +9,7 @@ export async function request<T>(
   }
 ): Promise<T> {
   const BASE_URL =
-    "http://3.10.140.74/api/";
+    "http://3.9.72.166/api/";
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",

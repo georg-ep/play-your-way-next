@@ -8,10 +8,13 @@ import { Chip } from "@nextui-org/chip";
 export default function LiveGamesTile() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
 
+  const URL = "ws://3.10.140.74/ws/live-games/";
+
   useEffect(() => {
-    const ws = new WebSocket(
-      "ws://3.10.140.74/ws/live-games/"
-    );
+    if (URL.startsWith("ws://")) {
+      return;
+    }
+    const ws = new WebSocket(URL);
     try {
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data);
