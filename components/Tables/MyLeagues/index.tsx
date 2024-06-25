@@ -144,7 +144,7 @@ export default function MyLeaguesTable() {
           </form>
         </Card>
       </Tab>
-      <Tab key="joined" title="My leagues">
+      <Tab isDisabled={!user} key="joined" title="My leagues">
         <Table
           headers={["Name", "Members", ""]}
           rows={privateLeagues?.map((league) => ({

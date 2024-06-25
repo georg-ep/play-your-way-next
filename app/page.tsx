@@ -51,7 +51,7 @@ export default function Home() {
           <Tab key='sweepstakes' title='Sweepstakes'>
             <SweepstakesTable />
           </Tab>
-          <Tab key='leagues' title='Private Leagues'>
+          <Tab isDisabled={!user} key='leagues' title='Private Leagues'>
             <MyLeaguesTable />
           </Tab>
           {/* <Tab key="live" title="Live matches">

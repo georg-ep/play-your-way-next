@@ -45,7 +45,7 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
             className="shadow-lg p-4 rounded-md"
           >
             <CardHeader className="flex flex-col items-start">
-              <div className="text-2xl font-bold">Match Winner</div>
+              <div className="text-2xl font-bold">{sstake.name}</div>
               <div className="text-sm text-default-500 mt-1 pt-1 border-t border-t-default-400">
                 Guess the correct winner from a series of matches and win points
                 to take the pot!
