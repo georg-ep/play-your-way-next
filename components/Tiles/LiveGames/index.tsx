@@ -9,6 +9,7 @@ export default function LiveGamesTile() {
   const [liveGames, setLiveGames] = useState<object[]>([]);
 
   const URL = "wss://play-your-way.co.uk/ws/live-games/";
+  // const URL = "ws://localhost:8000/ws/live-games/";
 
   useEffect(() => {
     const ws = new WebSocket(URL);

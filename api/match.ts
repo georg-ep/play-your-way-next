@@ -10,3 +10,13 @@ export async function fetchMatches(): Promise<Competition[]> {
     throw error; // Propagate the error to the caller
   }
 }
+
+export async function apiFetchPlayers(id: number) {
+  try {
+    const data: ListAPIResponse = await request(`football/match/${id}/players/`)
+    return data.results;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
