@@ -17,6 +17,7 @@ export default function SelectionsTab() {
   const { openModal } = useUIStore();
 
   const [selections, setSelections] = useState<FullTimeSelection>({});
+  const [scoreSelections, setScoreSelections] = useState({});
 
   useEffect(() => {
     if (sweepstake && sweepstake?.selections) {
@@ -35,11 +36,28 @@ export default function SelectionsTab() {
     } else {
       setSelections({});
     }
+
+    if (sweepstake && sweepstake?.score_selections) {
+      const _selections = sweepstake.score_selections.reduce(
+        (acc, selection) => {
+          return {
+            ...acc,
+            [selection.match]: selection.player,
+          };
+        },
+        {}
+      );
+      setScoreSelections(_selections);
+    } else if (scoreSelections) {
+      setScoreSelections(scoreSelections);
+    } else {
+      setScoreSelections({});
+    }
   }, [sweepstake]);
 
   const submit = async () => {
     try {
-      await submitSelections(sweepstake.id, selections);
+      await submitSelections(sweepstake.id, selections, scoreSelections);
       if (!sweepstake.has_entered) {
         await fetchUser();
         setSweepstake({ ...sweepstake, has_entered: true });
@@ -61,6 +79,13 @@ export default function SelectionsTab() {
 
   const hasFinished = () => sweepstake?.has_finished;
 
+  const inProgress = () =>
+    !sweepstake.has_entered && sweepstake.status === "IN_PROGRESS";
+
+  const outcome = (match) =>
+    sweepstake?.selections?.find((selection) => selection.match === match.id)
+      ?.correct_outcome;
+
   return (
     <>
       {sweepstake && sweepstake.matches ? (
@@ -69,14 +94,12 @@ export default function SelectionsTab() {
             <MatchTile
               key={`match_${index}`}
               match={match}
-              disabled={!sweepstake.has_entered && sweepstake.status === 'IN_PROGRESS'}
-              outcome={
-                sweepstake?.selections?.find(
-                  (selection) => selection.match === match.id
-                )?.correct_outcome
-              }
+              disabled={inProgress()}
+              outcome={outcome(match)}
               selections={selections}
               setSelections={setSelections}
+              scoreSelections={scoreSelections}
+              setScoreSelections={setScoreSelections}
             />
           ))}
         </div>
@@ -95,7 +118,7 @@ export default function SelectionsTab() {
           isDisabled={!allSelectionsMade() || hasFinished()}
         >
           {selections && sweepstake?.matches?.length ? (
-            !sweepstake.has_entered && sweepstake.status === 'IN_PROGRESS' ? (
+            inProgress() ? (
               <>In Progress</>
             ) : !allSelectionsMade() ? (
               <span>

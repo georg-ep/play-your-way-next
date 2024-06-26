@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 import type { Viewport } from "next";
 import LiveGamesTile from "@/components/Tiles/LiveGames";
 import Footer from "@/components/Footer";
+import Marquee from "react-fast-marquee";
 
 export const viewport: Viewport = {
   width: "device-width",

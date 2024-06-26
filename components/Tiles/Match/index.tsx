@@ -16,6 +16,8 @@ export default function MatchTile({
   match,
   selections,
   setSelections,
+  scoreSelections,
+  setScoreSelections,
   outcome,
   disabled = false,
 }) {
@@ -59,6 +61,10 @@ export default function MatchTile({
           label="Player to score"
           placeholder="Search players"
           fullWidth
+          inputValue={players?.find((item) => item.value === scoreSelections[match.id])?.label}
+          onSelectionChange={(value) => {
+            setScoreSelections({ ...scoreSelections, [match.id]: Number(value) });
+          }}
           isDisabled={matchStarted(match.utc_date) || disabled}
           endContent={
             <Chip
