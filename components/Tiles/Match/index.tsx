@@ -29,16 +29,16 @@ export default function MatchTile({
     { label: "A", value: "Away", color: "danger" },
   ];
 
-  useEffect(() => {
-    fetchPlayers();
-  }, []);
+  // useEffect(() => {
+  //   fetchPlayers();
+  // }, []);
 
-  const fetchPlayers = async () => {
-    const data = await apiFetchPlayers(match.id);
-    setPlayers(
-      data.map((player) => ({ label: player.name, value: player.id }))
-    );
-  };
+  // const fetchPlayers = async () => {
+  //   const data = await apiFetchPlayers(match.id);
+  //   setPlayers(
+  //     data.map((player) => ({ label: player.name, value: player.id }))
+  //   );
+  // };
 
   const matchStarted = (date) => {
     return new Date(date) < new Date();
@@ -65,7 +65,7 @@ export default function MatchTile({
           onSelectionChange={(value) => {
             setScoreSelections({ ...scoreSelections, [match.id]: Number(value) });
           }}
-          isDisabled={matchStarted(match.date) || disabled}
+          isDisabled={matchStarted(match.date) || disabled || true}
           endContent={
             <Chip
               startContent={
