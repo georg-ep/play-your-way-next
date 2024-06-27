@@ -25,7 +25,7 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
           ? "In Progress"
           : status === "FINISHED"
           ? "Finished"
-          : `Starts ${format(start_date)}`,
+          : `${format(start_date)}`,
     };
   };
 
@@ -56,7 +56,7 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
                 <div className="flex items-center">
                   <HiStatusOnline width={16} />{" "}
                   <span className="pl-1 ml-1 border-l border-l-2 border-l-default-300">
-                    Status
+                    {sstake.status !== "NOT_STARTED" ? "Status" : "Starts"}
                   </span>
                 </div>
                 <Chip
