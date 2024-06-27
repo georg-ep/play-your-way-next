@@ -12,7 +12,7 @@ import { IoMdTrophy } from "react-icons/io";
 export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
   const router = useRouter();
 
-  const status = (status) => {
+  const status = ({ status, start_date }) => {
     return {
       color:
         status === "IN_PROGRESS"
@@ -25,7 +25,7 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
           ? "In Progress"
           : status === "FINISHED"
           ? "Finished"
-          : "Not Started",
+          : `Starts ${format(start_date)}`,
     };
   };
 
@@ -61,13 +61,13 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
                 </div>
                 <Chip
                   className="text-center max-w-none px-0 rounded-md"
-                  color={status(sstake?.status).color}
+                  color={status(sstake).color}
                   variant="flat"
                 >
-                  {status(sstake?.status).text}
+                  {status(sstake).text}
                 </Chip>
               </div>
-              {sstake?.winner && (
+              {sstake?.winner && sstake.status !== "NOT_STARTED" && (
                 <div className="flex justify-between mt-2 w-full">
                   <div className="flex items-center">
                     <IoMdTrophy width={16} />{" "}
