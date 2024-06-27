@@ -26,7 +26,7 @@ export default function SweepstakeHeader() {
   };
 
   const status = () => {
-    const status = isLeague() ? privateLeague?.status : sweepstake?.status;
+    const status = isLeague() ? privateLeague?.sweepstake?.status : sweepstake?.status;
     return {
       name: status === "IN_PROGRESS" ? "In Progress" : status === "NOT_STARTED" ? "Not Started" : "Finished",
       color: status === "IN_PROGRESS" ? "warning" : status === "NOT_STARTED" ? "primary" : "success",
