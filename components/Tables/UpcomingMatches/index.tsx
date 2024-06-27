@@ -29,7 +29,7 @@ export default function UpcomingMatchesTable() {
           cells: [
             match.home_team.short_name,
             match.away_team.short_name,
-            format(match.utc_date),
+            format(match.date),
             <Button
               key={match.id}
               onPress={() =>

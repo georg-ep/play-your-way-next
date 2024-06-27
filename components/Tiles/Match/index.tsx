@@ -65,7 +65,7 @@ export default function MatchTile({
           onSelectionChange={(value) => {
             setScoreSelections({ ...scoreSelections, [match.id]: Number(value) });
           }}
-          isDisabled={matchStarted(match.utc_date) || disabled}
+          isDisabled={matchStarted(match.date) || disabled}
           endContent={
             <Chip
               startContent={
@@ -111,7 +111,7 @@ export default function MatchTile({
                   setSelections({ ...selections, [match.id]: outcome.value })
                 }
                 key={outcome.value}
-                isDisabled={matchStarted(match.utc_date) || disabled}
+                isDisabled={matchStarted(match.date) || disabled}
                 className={`${
                   selections[match.id] === outcome.value
                     ? `border-${outcome.color}`
@@ -124,7 +124,7 @@ export default function MatchTile({
             ))}
           </div>
           <div className="inline-flex whitespace-nowrap justify-center items-center mt-2">
-            <div className="text-[14px]">{format(match.utc_date)}</div>
+            <div className="text-[14px]">{format(match.date)}</div>
           </div>
           <div className={`inline-flex justify-center items-center mt-2`}>
             <Chip

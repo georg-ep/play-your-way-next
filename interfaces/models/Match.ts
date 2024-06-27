@@ -7,7 +7,7 @@ export interface Competition {
 
 export interface ShortMatch {
     id: number;
-    utc_date: string;
+    date: string;
     home_team: ShortTeam;
     away_team: ShortTeam;
 }
