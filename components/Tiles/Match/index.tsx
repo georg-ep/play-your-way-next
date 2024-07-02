@@ -55,7 +55,7 @@ export default function MatchTile({
     <div
       className={`gap-2 border border-1 p-3 rounded-lg ${
         match.status === "FINISHED"
-          ? winnerSelection.correct_outcome
+          ? winnerSelection?.correct_outcome
             ? "border-success"
             : "border-danger"
           : match.status === "IN_PLAY" || match.status === "PAUSED"
@@ -81,7 +81,7 @@ export default function MatchTile({
               <Chip
                 startContent={
                   match.status === "FINISHED" ? (
-                    winnerSelection.correct_outcome ? (
+                    winnerSelection?.correct_outcome ? (
                       <FaCheckCircle className="ml-2" color="#12A150" />
                     ) : (
                       <FaCircleXmark color="#F31260" className="ml-2" />
@@ -92,7 +92,7 @@ export default function MatchTile({
                 size="lg"
                 color={
                   match.status === "FINISHED"
-                    ? winnerSelection.correct_outcome
+                    ? winnerSelection?.correct_outcome
                       ? "success"
                       : "danger"
                     : "default"
@@ -179,7 +179,7 @@ export default function MatchTile({
           <Chip
             startContent={
               match.status === "FINISHED" ? (
-                scoreSelection.correct_outcome? (
+                scoreSelection?.correct_outcome? (
                   <FaCheckCircle className="ml-2" color="#12A150" />
                 ) : (
                   <FaCircleXmark color="#F31260" className="ml-2" />
@@ -190,7 +190,7 @@ export default function MatchTile({
             size="lg"
             color={
               match.status === "FINISHED"
-                ? scoreSelection.correct_outcome
+                ? scoreSelection?.correct_outcome
                   ? "success"
                   : "danger"
                 : "default"
