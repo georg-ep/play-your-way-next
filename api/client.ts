@@ -8,10 +8,12 @@ export async function request<T>(
     },
   }
 ): Promise<T> {
-  const BASE_URL =
-    "http://localhost:8000/api/";
-  // const BASE_URL =
-  //   "https://play-your-way.co.uk/api/";
+  let BASE_URL;
+  if (window.location.hostname === "localhost") {
+    BASE_URL = "http://localhost:8000/api/";
+  } else {
+    BASE_URL = "https://play-your-way.co.uk/api/";
+  }
   options.headers = {
     ...options.headers,
     "Content-Type": "application/json",
@@ -26,7 +28,7 @@ export async function request<T>(
     const response = await fetch(BASE_URL + url, options);
     if (!response.ok) {
       const errorData = await response.json();
-      const error = new Error('HTTP error');
+      const error = new Error("HTTP error");
       (error as any).response = errorData;
       throw error;
     }
