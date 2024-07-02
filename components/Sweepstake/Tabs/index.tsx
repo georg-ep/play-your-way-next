@@ -4,7 +4,7 @@ import SelectionsTab from "./Selections";
 
 export default function SweepstakeTabs() {
   return (
-    <Tabs fullWidth className="sticky">
+    <Tabs variant="bordered" fullWidth className="sticky">
       <Tab key="selections" title="Selections">
         <SelectionsTab />
       </Tab>

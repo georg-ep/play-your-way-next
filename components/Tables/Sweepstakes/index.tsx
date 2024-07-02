@@ -24,6 +24,7 @@ export interface Sweepstake {
   entry_cost: number;
   start_date: string;
   end_date: string;
+  is_paid?: boolean;
   type: {
     label: string;
     color: string;
@@ -31,7 +32,9 @@ export interface Sweepstake {
   id: number;
   name: string;
   status: string;
-  selections: FullTimeSelection[];
+  winner_selections?: FullTimeSelection[];
+  scorer_selections?: any[];
+  score_selections?: any[];
   has_entered?: boolean;
 }
 
@@ -61,9 +64,9 @@ export default function SweepstakesTable() {
           <Chip
             className="max-sm:p-1 max-sm:text-xs"
             key={sstake.id}
-            color={sstake.type.color}
+            color={sstake.type?.color ?? 'default'}
           >
-            {sstake.type.label}
+            {sstake.type?.label ?? 'Unknown'}
           </Chip>,
           format(sstake.start_date),
           sstake.name,

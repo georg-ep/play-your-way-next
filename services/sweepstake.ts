@@ -96,11 +96,12 @@ export const sweepstakeServices = () => {
 
   const submitSelections = async (
     id: number,
-    selections: FullTimeSelection,
+    winnerSelections: object = null,
+    scorerSelections: object = null,
     scoreSelections: object = null,
   ) => {
     try {
-      return await apiSubmitSelections(id, selections, scoreSelections);
+      return await apiSubmitSelections(id, winnerSelections, scorerSelections, scoreSelections);
     } catch (e) {
       throw e;
     }

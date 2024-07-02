@@ -43,9 +43,10 @@ export default function MyLeaguesTable() {
   };
 
   const handleJoinLeague = async () => {
+    const credits = leagueFound.is_paid ? Number(user.credits) : Number(user.test_credits);
     if (leagueFound.user_in_league) {
       return router.push(`/leagues/${leagueFound.code}/`)
-    } else if (Number(user.credits) < leagueFound.entry_cost) {
+    } else if (credits < leagueFound.entry_cost) {
       openModal("deposit");
     } else {
       try {

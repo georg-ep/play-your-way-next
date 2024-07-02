@@ -74,12 +74,14 @@ export async function apiMyPrivateLeagues(): Promise<any> {
 
 export async function apiSubmitSelections(
   id: number,
-  selections: FullTimeSelection,
-  scoreSelections: object = null
+  winnerSelections: object = null,
+  scorerSelections: object = null,
+  scoreSelections: object = null,
 ) {
   const payload = {
     sweepstake: id,
-    selections,
+    'winner_selections': winnerSelections,
+    'scorer_selections': scorerSelections,
     'score_selections': scoreSelections,
   };
   try {

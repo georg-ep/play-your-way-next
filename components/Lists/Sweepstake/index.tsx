@@ -45,8 +45,16 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
             className="shadow-lg p-4 rounded-md"
           >
             <CardHeader className="flex flex-col items-start">
-              <div className="text-2xl font-bold">{sstake.name}</div>
-              <div className="text-sm text-default-500 mt-1 pt-1 border-t border-t-default-400">
+              <div className="flex justify-between w-full">
+                <div className="text-2xl font-bold">{sstake.name}</div>
+                <Chip
+                  color={sstake.is_paid ? "success" : "primary"}
+                  variant="dot"
+                >
+                  {sstake.is_paid ? "Paid" : "Free"}
+                </Chip>
+              </div>
+              <div className="text-sm text-default-500 mt-1 pt-1">
                 Guess the correct winner from a series of matches and win points
                 to take the pot!
               </div>
@@ -61,7 +69,7 @@ export default function SweepstakeList({ sweepstakes, user, openModal, type }) {
                 </div>
                 <Chip
                   className="text-center max-w-none px-0 rounded-md"
-                  color={status(sstake).color}
+                  color={status(sstake)?.color ?? "default"}
                   variant="flat"
                 >
                   {status(sstake).text}

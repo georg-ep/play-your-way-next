@@ -26,15 +26,27 @@ export default function SweepstakeHeader() {
   };
 
   const status = () => {
-    const status = isLeague() ? privateLeague?.sweepstake?.status : sweepstake?.status;
+    const status = isLeague()
+      ? privateLeague?.sweepstake?.status
+      : sweepstake?.status;
     return {
-      name: status === "IN_PROGRESS" ? "In Progress" : status === "NOT_STARTED" ? "Not Started" : "Finished",
-      color: status === "IN_PROGRESS" ? "warning" : status === "NOT_STARTED" ? "primary" : "success",
+      name:
+        status === "IN_PROGRESS"
+          ? "In Progress"
+          : status === "NOT_STARTED"
+          ? "Not Started"
+          : "Finished",
+      color:
+        status === "IN_PROGRESS"
+          ? "warning"
+          : status === "NOT_STARTED"
+          ? "primary"
+          : "success",
     };
   };
 
   return (
-    <Card className={`mb-4 p-4 border border-${status().color}`}>
+    <Card className={`mb-4 bg-transparent p-4 border-t border-${status().color}`}>
       {name() && sweepstake ? (
         <CardHeader className="flex flex-col relative">
           <div
@@ -44,9 +56,14 @@ export default function SweepstakeHeader() {
           >
             <div>{status().name}</div>
           </div>
-          <div className="w-full">
+          <div className="w-full text-center">
             <div>
               <p className="text-[32px] text-center font-bold">{name()}</p>
+              {isLeague() && (
+                <Chip variant="solid" color="primary" className='mt-2 mb-3'>
+                  Code: {privateLeague.code}
+                </Chip>
+              )}
               <p className="text-md mb-8 text-center text-default-600">
                 {format(sweepstake.start_date)} - {format(sweepstake.end_date)}
               </p>
@@ -67,9 +84,8 @@ export default function SweepstakeHeader() {
       ) : (
         <Spinner size="lg" className="my-5" color="default" />
       )}
-      <Divider />
       <CardBody>
-        <FAQFullTimeResult />
+        {/* <FAQFullTimeResult /> */}
       </CardBody>
     </Card>
   );

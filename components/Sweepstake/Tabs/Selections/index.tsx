@@ -6,7 +6,12 @@ import { userServices } from "@/services/user";
 import { useSweepstakeStore } from "@/stores/sweepstake";
 import { useUIStore } from "@/stores/ui";
 import { Button, Spinner, Tab } from "@nextui-org/react";
-import { useParams, usePathname } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -15,49 +20,53 @@ export default function SelectionsTab() {
   const { submitSelections } = sweepstakeServices();
   const { fetchUser } = userServices();
   const { openModal } = useUIStore();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-  const [selections, setSelections] = useState<FullTimeSelection>({});
+  const [winnerSelections, setWinnerSelections] = useState<
+    FullTimeSelection | object
+  >({});
+  const [scorerSelections, setScorerSelections] = useState({});
   const [scoreSelections, setScoreSelections] = useState({});
 
   useEffect(() => {
-    if (sweepstake && sweepstake?.selections) {
-      const _selections: FullTimeSelection = sweepstake.selections.reduce(
-        (acc, selection) => {
-          return {
-            ...acc,
-            [selection.match]: selection.outcome,
-          };
-        },
-        {}
-      );
-      setSelections(_selections);
-    } else if (selections) {
-      setSelections(selections);
-    } else {
-      setSelections({});
-    }
+    const _selections =
+      sweepstake?.winner_selections?.reduce(
+        (acc, { match, outcome }) => ({ ...acc, [match]: outcome }),
+        winnerSelections || {}
+      ) || {};
 
-    if (sweepstake && sweepstake?.score_selections) {
-      const _selections = sweepstake.score_selections.reduce(
-        (acc, selection) => {
-          return {
-            ...acc,
-            [selection.match]: selection.player,
-          };
-        },
-        {}
-      );
-      setScoreSelections(_selections);
-    } else if (scoreSelections) {
-      setScoreSelections(scoreSelections);
-    } else {
-      setScoreSelections({});
-    }
+    setWinnerSelections(_selections);
+
+    const _scorerSelections =
+      sweepstake?.scorer_selections?.reduce(
+        (acc, { match, player }) => ({ ...acc, [match]: player }),
+        scorerSelections || {}
+      ) || {};
+
+    setScorerSelections(_scorerSelections);
+
+    const _scoreSelections =
+      sweepstake?.score_selections?.reduce(
+        (acc, { match, home_score, away_score }) => ({
+          ...acc,
+          [match]: { home_score, away_score },
+        }),
+        scoreSelections || {}
+      ) || {};
+
+    setScoreSelections(_scoreSelections);
   }, [sweepstake]);
 
   const submit = async () => {
     try {
-      await submitSelections(sweepstake.id, selections, scoreSelections);
+      await submitSelections(
+        sweepstake.id,
+        winnerSelections,
+        scorerSelections,
+        scoreSelections
+      );
       if (!sweepstake.has_entered) {
         await fetchUser();
         setSweepstake({ ...sweepstake, has_entered: true });
@@ -68,23 +77,27 @@ export default function SelectionsTab() {
     } catch (e) {
       toast.error(e.response?.detail ?? "Error submitting selections");
       if (e.response?.detail?.includes("credits")) {
+        const params = new URLSearchParams(searchParams);
+
+        if (sweepstake.is_paid) {
+          params.set("tab", "prod");
+        } else {
+          params.set("tab", "test");
+        }
+        replace(`${pathname}?${params.toString()}`);
         openModal("deposit");
       }
     }
   };
 
   const allSelectionsMade = () => {
-    return Object.keys(selections).length >= sweepstake?.matches?.length;
+    return Object.keys(winnerSelections).length >= sweepstake?.matches?.length;
   };
 
   const hasFinished = () => sweepstake?.has_finished;
 
   const inProgress = () =>
     !sweepstake.has_entered && sweepstake.status === "IN_PROGRESS";
-
-  const outcome = (match) =>
-    sweepstake?.selections?.find((selection) => selection.match === match.id)
-      ?.correct_outcome;
 
   return (
     <>
@@ -94,12 +107,23 @@ export default function SelectionsTab() {
             <MatchTile
               key={`match_${index}`}
               match={match}
+              types={sweepstake.type}
               disabled={inProgress()}
-              outcome={outcome(match)}
-              selections={selections}
-              setSelections={setSelections}
-              scoreSelections={scoreSelections}
-              setScoreSelections={setScoreSelections}
+              winnerSelection={winnerSelections[match.id]}
+              updateWinner={(e) =>
+                setWinnerSelections({ ...winnerSelections, [match.id]: e })
+              }
+              scorerSelection={scorerSelections[match.id]}
+              updateScorer={(e) =>
+                setScorerSelections({ ...scorerSelections, [match.id]: e })
+              }
+              scoreSelection={scoreSelections[match.id]}
+              updateScore={(e) =>
+                setScoreSelections({
+                  ...scoreSelections,
+                  [match.id]: { ...(scoreSelections[match.id] || {}), ...e },
+                })
+              }
             />
           ))}
         </div>
@@ -117,13 +141,13 @@ export default function SelectionsTab() {
           className="mt-4 max-sm:mb-4"
           isDisabled={!allSelectionsMade() || hasFinished()}
         >
-          {selections && sweepstake?.matches?.length ? (
+          {winnerSelections && sweepstake?.matches?.length ? (
             inProgress() ? (
               <>In Progress</>
             ) : !allSelectionsMade() ? (
               <span>
-                {Object.keys(selections).length} / {sweepstake.matches.length}{" "}
-                selections
+                {Object.keys(winnerSelections).length} /{" "}
+                {sweepstake.matches.length} selections
               </span>
             ) : hasFinished() ? (
               <>Sweepstake Finished</>

@@ -2,6 +2,7 @@
 
 import {
   Button,
+  Chip,
   Link,
   Navbar,
   NavbarBrand,
@@ -54,7 +55,6 @@ export default function Header() {
       case "register":
         openModal("auth", { initialType: "register" });
     }
-
   };
 
   const menuItems = [
@@ -108,14 +108,20 @@ export default function Header() {
               </>
             ) : (
               <div className={"flex items-center gap-2"}>
-                <Button
-                  disableRipple
-                  variant="flat"
-                  color="success"
-                  size={window.innerWidth < 640 ? "sm" : "md"}
-                >
-                  {user.username}
-                </Button>
+                <div className="border-r border-default-300 pr-2 flex flex-col gap-1 text-sm">
+                  <div className="w-full flex items-center gap-1">
+                    <Chip variant="dot" color="warning" size="sm">
+                      Test
+                    </Chip>
+                    <div>£{user.test_credits}</div>
+                  </div>
+                  <div className="w-full flex items-center gap-1">
+                    <Chip variant="dot" color="primary" size="sm">
+                      Real
+                    </Chip>
+                    <div>£{user.credits}</div>
+                  </div>
+                </div>
                 <Button
                   disableRipple
                   onPress={() => handleClick("deposit")}
@@ -123,7 +129,15 @@ export default function Header() {
                   color="secondary"
                   size={window.innerWidth < 640 ? "sm" : "md"}
                 >
-                  £{user.credits}
+                  Deposit
+                </Button>
+                <Button
+                  disableRipple
+                  variant="flat"
+                  color="success"
+                  size={window.innerWidth < 640 ? "sm" : "md"}
+                >
+                  {user.username}
                 </Button>
                 <Button
                   onPress={() => handleClick("logout")}
@@ -140,13 +154,17 @@ export default function Header() {
         )}
       </NavbarContent>
 
-      <NavbarMenu className='px-3'>
+      <NavbarMenu className="px-3">
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
               className="w-full"
               color={
-                index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
+                index === 2
+                  ? "warning"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
               }
               onClick={item?.onClick}
               size="lg"
@@ -157,9 +175,25 @@ export default function Header() {
         ))}
       </NavbarMenu>
 
-      {user && <NavbarContent  className="sm:hidden" justify="end">
-        <NavbarMenuToggle />
-      </NavbarContent>}
+      {user && (
+        <NavbarContent className="sm:hidden" justify="end">
+          <div className="border-r border-default-300 pr-2 flex flex-col gap-1 text-sm">
+            <div className="w-full flex items-center gap-1">
+              <Chip variant="dot" color="warning" size="sm">
+                Test
+              </Chip>
+              <div>£{user.test_credits}</div>
+            </div>
+            <div className="w-full flex items-center gap-1">
+              <Chip variant="dot" color="primary" size="sm">
+                Real
+              </Chip>
+              <div>£{user.credits}</div>
+            </div>
+          </div>
+          <NavbarMenuToggle />
+        </NavbarContent>
+      )}
     </Navbar>
   );
 }

@@ -11,6 +11,7 @@ import SweepstakeTabs from "@/components/Sweepstake/Tabs";
 
 export interface FullTimeSelection {
   [match_id: number]: "Home" | "Draw" | "Away";
+  outcome: "Home" | "Draw" | "Away";
 }
 
 export default function SweepstakeIndex() {

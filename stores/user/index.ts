@@ -3,6 +3,7 @@ import { create } from "zustand";
 export interface User {
   id: number;
   credits: string;
+  test_credits: string;
   email: string;
   first_name?: string;
   last_name?: string;

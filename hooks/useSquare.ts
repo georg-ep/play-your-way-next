@@ -1,36 +1,50 @@
 import { processPayment } from "@/api/payments";
 import { userServices } from "@/services/user";
 import { useUIStore } from "@/stores/ui";
-import { useEffect, useRef } from "react";
+import { Key, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-interface UseSquareProps {
+interface SquareProps {
   setLoading: (val: boolean) => void;
   setProcessingPayment: (val: boolean) => void;
+  tab: Key;
 }
 
-export default function useSquare({ setProcessingPayment, setLoading }: UseSquareProps) {
-  const initialized = useRef<boolean>(false);
+export default function useSquare({
+  setProcessingPayment,
+  setLoading,
+  tab,
+}: SquareProps) {
   const { fetchUser } = userServices();
   const { closeModal } = useUIStore();
 
-  useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
+  const squareInfo = () => {
+    const info = {
+      sandbox: {
+        src: "https://sandbox.web.squarecdn.com/v1/square.js",
+        appId: "sandbox-sq0idb-0dUGYC2BXaf2esiBL_LeTw",
+        locationId: "L00BHXGEM80JT",
+      },
+      production: {
+        src: "https://web.squarecdn.com/v1/square.js",
+        appId: "sq0idp-GH2ADfHN-Gy3bGTbCmf0LA",
+        locationId: "LDXDGWW7P4G76",
+      },
+    };
+    return info[tab as string];
+  };
 
+  useEffect(() => {
     const loadSquare = async () => {
-      const script = document.createElement("script");
-      script.src = "https://sandbox.web.squarecdn.com/v1/square.js";
-      script.async = true;
-      script.onload = () => loadElements();
-      document.head.appendChild(script);
+      const { src, appId, locationId } = squareInfo();
+      const _script = document.createElement("script");
+      _script.src = src;
+      _script.async = true;
+      _script.onload = () => loadElements(appId, locationId);
+      document.head.appendChild(_script);
     };
 
-    // Add script tag to page so square can be used
     loadSquare();
-
-    const appId = "sandbox-sq0idb-0dUGYC2BXaf2esiBL_LeTw";
-    const locationId = "L00BHXGEM80JT";
 
     async function initializeCard(payments) {
       const card = await payments.card();
@@ -38,37 +52,41 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
       return card;
     }
 
-    function buildPaymentRequest(payments) {
-      return payments.paymentRequest({
-        countryCode: "US",
-        currencyCode: "USD",
-        total: {
-          amount: "1.00",
-          label: "Total",
-        },
-      });
-    }
+    // function buildPaymentRequest(payments) {
+    //   return payments.paymentRequest({
+    //     countryCode: "US",
+    //     currencyCode: "USD",
+    //     total: {
+    //       amount: "1.00",
+    //       label: "Total",
+    //     },
+    //   });
+    // }
 
-    async function initializeApplePay(payments) {
-      const paymentRequest = buildPaymentRequest(payments);
-      const applePay = await payments.applePay(paymentRequest);
-      // Note: You do not need to `attach` applePay.
-      return applePay;
-    }
+    // async function initializeApplePay(payments) {
+    //   const paymentRequest = buildPaymentRequest(payments);
+    //   const applePay = await payments.applePay(paymentRequest);
+    //   // Note: You do not need to `attach` applePay.
+    //   return applePay;
+    // }
 
     async function createPayment(token: string) {
-      const amount = document.getElementById("deposit-amount").value;
+      const statusContainer = document.getElementById(
+        "payment-status-container"
+      );
+      const amount = document.getElementById("deposit-amount").value * 100;
       if (!amount) throw new Error("Could not find deposit amount");
-      if (amount && amount > 10) {
-        toast.error('Amount cannot be greater than £10');
+      if (amount && amount > 1000) {
+        toast.error("Amount cannot be greater than £10");
         throw new Error("Amount cannot be greater than £10");
-      } 
+      }
 
       const body = JSON.stringify({
-        locationId,
+        locationId: squareInfo().locationId,
         sourceId: token,
         idempotencyKey: window.crypto.randomUUID(),
         amount,
+        environment: tab,
       });
 
       try {
@@ -76,6 +94,7 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
         await fetchUser();
         closeModal();
       } catch (e: any) {
+        statusContainer.textContent = "Payment failed";
         throw new Error(e);
       }
     }
@@ -113,7 +132,10 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
       }
     }
 
-    async function loadElements() {
+    async function loadElements(appId, locationId) {
+      if (document.getElementById("card-container").hasChildNodes()) {
+        document.getElementById("card-container").firstChild.remove();
+      }
       setLoading(true);
       if (!(window as any).Square) {
         setLoading(false);
@@ -122,7 +144,7 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
       let payments;
       try {
         payments = (window as any).Square.payments(appId, locationId);
-      } catch {
+      } catch (e) {
         const statusContainer = document.getElementById(
           "payment-status-container"
         );
@@ -142,12 +164,12 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
         return;
       }
 
-      let applePay;
-      try {
-        applePay = await initializeApplePay(payments);
-      } catch (e) {
-        console.error("Initializing Apple Pay failed", e);
-      }
+      // let applePay;
+      // try {
+      //   applePay = await initializeApplePay(payments);
+      // } catch (e) {
+      //   console.error("Initializing Apple Pay failed", e);
+      // }
 
       async function handlePaymentMethodSubmission(event, paymentMethod) {
         setProcessingPayment(true);
@@ -158,7 +180,7 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
           const token = await tokenize(paymentMethod);
           await createPayment(token);
           displayPaymentResults("SUCCESS");
-          toast.success('Deposit success');
+          toast.success("Deposit success");
         } catch (e: any) {
           cardButton.disabled = false;
           displayPaymentResults("FAILURE");
@@ -173,13 +195,13 @@ export default function useSquare({ setProcessingPayment, setLoading }: UseSquar
         await handlePaymentMethodSubmission(event, card!);
       });
 
-      if (applePay) {
-        const applePayButton = document.getElementById("apple-pay-button");
-        applePayButton.addEventListener("click", async function (event) {
-          await handlePaymentMethodSubmission(event, applePay);
-        });
-      }
+      // if (applePay) {
+      //   const applePayButton = document.getElementById("apple-pay-button");
+      //   applePayButton.addEventListener("click", async function (event) {
+      //     await handlePaymentMethodSubmission(event, applePay);
+      //   });
+      // }
       setLoading(false);
     }
-  }, []);
+  }, [tab]);
 }
