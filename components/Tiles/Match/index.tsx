@@ -173,7 +173,7 @@ export default function MatchTile({
           </div>
         </div>
       )}
-      <div className=" mt-4 border-t border-t-default-300 pt-4">
+      {isMS() && <div className=" mt-4 border-t border-t-default-300 pt-4">
         <div className="flex justify-between items-center">
           <div className="font-bold">Match Score</div>
           <Chip
@@ -240,7 +240,7 @@ export default function MatchTile({
             className="w-full max-w-[200px]"
           />
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
