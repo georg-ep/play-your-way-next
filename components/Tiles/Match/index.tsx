@@ -159,7 +159,7 @@ export default function MatchTile({
                       (index === 1 && match.is_ko)
                     }
                     className={`${
-                      winnerSelection === outcome.value
+                      winnerSelection?.outcome === outcome.value
                         ? `border-${outcome.color}`
                         : null
                     } p-0 h-[50px] w-[50px] min-w-0`}
