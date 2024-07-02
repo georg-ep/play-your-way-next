@@ -33,7 +33,7 @@ export default function SelectionsTab() {
   useEffect(() => {
     const _selections =
       sweepstake?.winner_selections?.reduce(
-        (acc, { match, outcome }) => ({ ...acc, [match]: outcome }),
+        (acc, { match, outcome, correct_outcome }) => ({ ...acc, [match]: { correct_outcome, outcome } }),
         winnerSelections || {}
       ) || {};
 
@@ -41,7 +41,7 @@ export default function SelectionsTab() {
 
     const _scorerSelections =
       sweepstake?.scorer_selections?.reduce(
-        (acc, { match, player }) => ({ ...acc, [match]: player }),
+        (acc, { match, player, correct_outcome }) => ({ ...acc, [match]: {player, correct_outcome} }),
         scorerSelections || {}
       ) || {};
 
@@ -49,9 +49,9 @@ export default function SelectionsTab() {
 
     const _scoreSelections =
       sweepstake?.score_selections?.reduce(
-        (acc, { match, home_score, away_score }) => ({
+        (acc, { match, home_score, away_score, correct_outcome }) => ({
           ...acc,
-          [match]: { home_score, away_score },
+          [match]: { home_score, away_score, correct_outcome },
         }),
         scoreSelections || {}
       ) || {};
