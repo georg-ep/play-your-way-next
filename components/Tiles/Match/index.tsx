@@ -173,74 +173,78 @@ export default function MatchTile({
           </div>
         </div>
       )}
-      {isMS() && <div className=" mt-4 border-t border-t-default-300 pt-4">
-        <div className="flex justify-between items-center">
-          <div className="font-bold">Match Score</div>
-          <Chip
-            startContent={
-              match.status === "FINISHED" ? (
-                scoreSelection?.correct_outcome? (
-                  <FaCheckCircle className="ml-2" color="#12A150" />
-                ) : (
-                  <FaCircleXmark color="#F31260" className="ml-2" />
-                )
-              ) : null
-            }
-            variant="faded"
-            size="lg"
-            color={
-              match.status === "FINISHED"
-                ? scoreSelection?.correct_outcome
-                  ? "success"
-                  : "danger"
-                : "default"
-            }
-            className={`text-[10px]`}
-          >
-            7 pts
-          </Chip>
-        </div>
+      {isMS() && (
+        <div className=" mt-4 border-t border-t-default-300 pt-4">
+          <div className="flex justify-between items-center">
+            <div className="font-bold">Match Score</div>
+            <Chip
+              startContent={
+                match.status === "FINISHED" ? (
+                  scoreSelection?.correct_outcome ? (
+                    <FaCheckCircle className="ml-2" color="#12A150" />
+                  ) : (
+                    <FaCircleXmark color="#F31260" className="ml-2" />
+                  )
+                ) : null
+              }
+              variant="faded"
+              size="lg"
+              color={
+                match.status === "FINISHED"
+                  ? scoreSelection?.correct_outcome
+                    ? "success"
+                    : "danger"
+                  : "default"
+              }
+              className={`text-[10px]`}
+            >
+              7 pts
+            </Chip>
+          </div>
 
-        <div className="mt-2 flex gap-4 justify-center items-center">
-          <Input
-            variant="bordered"
-            value={scoreSelection?.home_score}
-            onValueChange={(e) =>
-              updateScore({ home_score: e === "" ? undefined : Number(e) })
-            }
-            type="number"
-            startContent={
-              <Image
-                src={match.home_team.crest}
-                className="w-[20px] h-[20px] mr-2"
-                width={40}
-                height={40}
-                alt={""}
-              />
-            }
-            className="w-full max-w-[200px]"
-          />
-          <div>-</div>
-          <Input
-            variant="bordered"
-            value={scoreSelection?.away_score}
-            onValueChange={(e) =>
-              updateScore({ away_score: e.length === 0 ? undefined : Number(e) })
-            }
-            type="number"
-            endContent={
-              <Image
-                src={match.away_team.crest}
-                className="w-[20px] h-[20px] ml-2"
-                width={40}
-                height={40}
-                alt={""}
-              />
-            }
-            className="w-full max-w-[200px]"
-          />
+          <div className="mt-2 flex gap-4 justify-center items-center">
+            <Input
+              variant="bordered"
+              value={scoreSelection?.home_score}
+              onValueChange={(e) =>
+                updateScore({ home_score: e === "" ? undefined : Number(e) })
+              }
+              type="number"
+              startContent={
+                <Image
+                  src={match.home_team.crest}
+                  className="w-[20px] h-[20px] mr-2"
+                  width={40}
+                  height={40}
+                  alt={""}
+                />
+              }
+              className="w-full max-w-[200px]"
+            />
+            <div>-</div>
+            <Input
+              variant="bordered"
+              value={scoreSelection?.away_score}
+              onValueChange={(e) =>
+                updateScore({
+                  away_score: e.length === 0 ? undefined : Number(e),
+                })
+              }
+              type="number"
+              endContent={
+                <Image
+                  src={match.away_team.crest}
+                  className="w-[20px] h-[20px] ml-2"
+                  width={40}
+                  height={40}
+                  alt={""}
+                />
+              }
+              className="w-full max-w-[200px]"
+            />
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

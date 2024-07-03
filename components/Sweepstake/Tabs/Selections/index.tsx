@@ -33,7 +33,10 @@ export default function SelectionsTab() {
   useEffect(() => {
     const _selections =
       sweepstake?.winner_selections?.reduce(
-        (acc, { match, outcome, correct_outcome }) => ({ ...acc, [match]: { correct_outcome, outcome } }),
+        (acc, { match, outcome, correct_outcome }) => ({
+          ...acc,
+          [match]: { correct_outcome, outcome },
+        }),
         winnerSelections || {}
       ) || {};
 
@@ -41,7 +44,10 @@ export default function SelectionsTab() {
 
     const _scorerSelections =
       sweepstake?.scorer_selections?.reduce(
-        (acc, { match, player, correct_outcome }) => ({ ...acc, [match]: {player, correct_outcome} }),
+        (acc, { match, player, correct_outcome }) => ({
+          ...acc,
+          [match]: { player, correct_outcome },
+        }),
         scorerSelections || {}
       ) || {};
 
@@ -111,7 +117,10 @@ export default function SelectionsTab() {
               disabled={inProgress()}
               winnerSelection={winnerSelections[match.id]}
               updateWinner={(e) =>
-                setWinnerSelections({ ...winnerSelections, [match.id]: e })
+                setWinnerSelections({
+                  ...winnerSelections,
+                  [match.id]: { outcome: e },
+                })
               }
               scorerSelection={scorerSelections[match.id]}
               updateScorer={(e) =>
